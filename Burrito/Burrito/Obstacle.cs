@@ -26,7 +26,9 @@ namespace Burrito
 
         public void Draw(SpriteBatch sb)
         {
-            sb.Draw(obstacle, position, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), Color.White);
+            sb.Draw(obstacle, position, 
+                new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y),
+                Color.White);
         }
     }
 }
