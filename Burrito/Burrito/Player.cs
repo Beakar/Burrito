@@ -75,7 +75,7 @@ namespace Burrito
                 velocity.Y += 0.5f * i;  //Gravity to be applied (Curr: 0.5f / Increase to add more)
             }
 
-            if (position.Y >= 200)  //Max jump height (Curr: 200)
+            if (position.Y >= 275)  //Check to make sure player doesnt fall through the floor
                 hasJumped = false;
 
             if (hasJumped == false)
