@@ -58,7 +58,7 @@ namespace Burrito
                 }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) && hasJumped == false)
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
             {
                 position.Y -= 10f;
                 velocity.Y = -10f;
