@@ -59,8 +59,9 @@ namespace Burrito
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");
             player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,275), sound);
-            player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");
+            player.soundtrack = Content.Load<Song>(@"Sound\soundtrack2");
             MediaPlayer.Play(player.soundtrack);
+            MediaPlayer.IsRepeating = true;
             myBackground.Load(GraphicsDevice, background);
         }
 
