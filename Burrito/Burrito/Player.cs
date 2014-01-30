@@ -20,7 +20,7 @@ namespace Burrito
 
         //FrameRate info
         private float fElapsed = 0.0f;
-        private float frameRate = 0.05f;
+        private float frameRate = 0.1f;
         //Sprite Sheet info (Each point is a position on the Sprite Sheet)
         private Point frameSize = new Point(200, 200);
         private Point currentFrame = new Point(0, 0);
@@ -63,19 +63,19 @@ namespace Burrito
 
              if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
             {
-                position.Y -= 20f;
-                velocity.Y = -15f;
-                sound[0].Play();
+                position.Y -= 20f;  //Initial Jump Speed (Curr: 20f / only change this value)
+                velocity.Y = -15f;  //Initial Jump velocity (Curr: -15f / Value must be <0f)
+                sound[0].Play();    //Jump Sound Effect
                 hasJumped = true;
             }
 
             if (hasJumped == true)
             {
                 float i = 1;
-                velocity.Y += 0.5f * i;
+                velocity.Y += 0.5f * i;  //Gravity to be applied (Curr: 0.5f / Increase to add more)
             }
 
-            if (position.Y >= 200)
+            if (position.Y >= 200)  //Max jump height (Curr: 200)
                 hasJumped = false;
 
             if (hasJumped == false)
