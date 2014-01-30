@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Burrito
 {
@@ -19,13 +20,15 @@ namespace Burrito
 
         //FrameRate info
         private float fElapsed = 0.0f;
-        private float frameRate = 0.15f;
+        private float frameRate = 0.05f;
         //Sprite Sheet info (Each point is a position on the Sprite Sheet)
         private Point frameSize = new Point(200, 200);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(5, 4);
 
         SoundEffect[] sound = new SoundEffect[1];
+
+        public Song soundtrack { get; set; }
 
         public Player(Texture2D newTexture, Vector2 newPosition, SoundEffect[] sounds)
         {
@@ -47,10 +50,10 @@ namespace Burrito
                 //Moves the Source Rectangle
 
                 ++currentFrame.X;
-                if (currentFrame.X >= sheetSize.X)
+                if (currentFrame.X >= sheetSize.X - 2)
                 {
                     currentFrame.X = 0;
-                    ++currentFrame.Y;
+                    //++currentFrame.Y;
                     if (currentFrame.Y >= sheetSize.Y)
                     {
                         currentFrame.Y = 0;
@@ -58,10 +61,10 @@ namespace Burrito
                 }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
+             if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
             {
-                position.Y -= 10f;
-                velocity.Y = -10f;
+                position.Y -= 20f;
+                velocity.Y = -15f;
                 sound[0].Play();
                 hasJumped = true;
             }
@@ -69,7 +72,7 @@ namespace Burrito
             if (hasJumped == true)
             {
                 float i = 1;
-                velocity.Y += 0.5f * i;
+                velocity.Y += 0.7f * i;
             }
 
             if (position.Y >= 200)

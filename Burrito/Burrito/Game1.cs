@@ -59,6 +59,8 @@ namespace Burrito
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");
             player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,200), sound);
+            player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");
+            MediaPlayer.Play(player.soundtrack);
             myBackground.Load(GraphicsDevice, background);
         }
 
@@ -87,7 +89,7 @@ namespace Burrito
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // TODO: Add your game logic here.
-            myBackground.Update(elapsed * 300);
+            myBackground.Update(elapsed * 350);
             player.Update(gameTime);
             base.Update(gameTime);
         }
