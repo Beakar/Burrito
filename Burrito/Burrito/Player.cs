@@ -36,6 +36,7 @@ namespace Burrito
             player = newTexture;
             position = newPosition;
             hasJumped = true;
+            hasJumped = false;
         }
 
         public void Update(GameTime gametime)
