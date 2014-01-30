@@ -23,9 +23,6 @@ namespace Burrito
         Background myBackground;
         Player player;
 
-        //SOUND EFFECT
-        SoundEffect[] sounds = new SoundEffect[10];
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -59,8 +56,7 @@ namespace Burrito
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background");
-            sounds[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");
-            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,200), sounds);
+            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,200));
             myBackground.Load(GraphicsDevice, background);
         }
 

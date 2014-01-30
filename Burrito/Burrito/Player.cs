@@ -25,13 +25,10 @@ namespace Burrito
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(5, 4);
 
-        private SoundEffect[] sounds = new SoundEffect[10];
-
-        public Player(Texture2D newTexture, Vector2 newPosition, SoundEffect[] soundEffects)
+        public Player(Texture2D newTexture, Vector2 newPosition)
         {
             player = newTexture;
             position = newPosition;
-            sounds = soundEffects;
             hasJumped = true;
         }
 
@@ -61,15 +58,14 @@ namespace Burrito
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && hasJumped == false)
             {
                 position.Y -= 10f;
-                velocity.Y = -5f;
-                sounds[0].Play();
+                velocity.Y = -10f;
                 hasJumped = true;
             }
 
             if (hasJumped == true)
             {
                 float i = 1;
-                velocity.Y += 0.15f * i;
+                velocity.Y += 0.5f * i;
             }
 
             if (position.Y >= 200)
