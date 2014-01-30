@@ -54,7 +54,7 @@ namespace Burrito
             // to create the scrolling illusion.
             batch.Draw(mytexture, screenpos + texturesize, null,
                  Color.White, 0, origin, 1, SpriteEffects.None, 0f);
-            Vector2 coor = new Vector2(0, 375);// location of floor
+            Vector2 coor = new Vector2(0, 450);// location of floor
             batch.Draw(rect, coor, Color.White);
         }
 
