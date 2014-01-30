@@ -63,8 +63,13 @@ namespace Burrito
 
              if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
             {
+<<<<<<< HEAD
                 position.Y -= 20f;
                 velocity.Y = -15f;
+=======
+                position.Y -= 10f;  //Initial Jump Speed (frames)
+                velocity.Y = -10f;  //Velocity up (frames)
+>>>>>>> 8a86ce2df8991c6cce90ca539679101bbe4cc9cc
                 sound[0].Play();
                 hasJumped = true;
             }
@@ -72,7 +77,11 @@ namespace Burrito
             if (hasJumped == true)
             {
                 float i = 1;
+<<<<<<< HEAD
                 velocity.Y += 0.7f * i;
+=======
+                velocity.Y += 0.5f * i;  //Applys gravity, increase to fall faster (Current Value: 0.5f)
+>>>>>>> 8a86ce2df8991c6cce90ca539679101bbe4cc9cc
             }
 
             if (position.Y >= 200)
