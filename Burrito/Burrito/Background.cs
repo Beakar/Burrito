@@ -13,10 +13,15 @@ namespace Burrito
         // class Background
         private Vector2 screenpos, origin, texturesize;
         private Texture2D mytexture;
+        private Texture2D rect;
         private int screenheight;
         private int screenwidth;
         public void Load(GraphicsDevice device, Texture2D backgroundTexture)
         {
+            rect = new Texture2D(device, 1280, 30);
+            Color[] data = new Color[1280 * 30];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.SaddleBrown;
+            rect.SetData(data);
             mytexture = backgroundTexture;
             screenheight = device.Viewport.Height;
             screenwidth = device.Viewport.Width;
@@ -49,6 +54,14 @@ namespace Burrito
             // to create the scrolling illusion.
             batch.Draw(mytexture, screenpos + texturesize, null,
                  Color.White, 0, origin, 1, SpriteEffects.None, 0f);
+
+
+            
+
+            Vector2 coor = new Vector2(0, 375);
+            batch.Draw(rect, coor, Color.White);
         }
+
+       
     }
 }
