@@ -56,7 +56,9 @@ namespace Burrito
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background");
-            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,200));
+            SoundEffect[] sound = new SoundEffect[1];
+            sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");
+            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,200), sound);
             myBackground.Load(GraphicsDevice, background);
         }
 

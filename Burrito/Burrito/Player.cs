@@ -25,8 +25,11 @@ namespace Burrito
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(5, 4);
 
-        public Player(Texture2D newTexture, Vector2 newPosition)
+        SoundEffect[] sound = new SoundEffect[1];
+
+        public Player(Texture2D newTexture, Vector2 newPosition, SoundEffect[] sounds)
         {
+            sound = sounds;
             player = newTexture;
             position = newPosition;
             hasJumped = true;
@@ -59,6 +62,7 @@ namespace Burrito
             {
                 position.Y -= 10f;
                 velocity.Y = -10f;
+                sound[0].Play();
                 hasJumped = true;
             }
 
