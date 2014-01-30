@@ -111,9 +111,11 @@
     <Compile Include="Background.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Powerup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="SpeedPowerUp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
