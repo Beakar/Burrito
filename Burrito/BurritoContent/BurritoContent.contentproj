@@ -49,11 +49,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\cartoonspring.mp3">
-      <Name>cartoonspring</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
     <Compile Include="Textures\Background.JPG">
       <Name>Background</Name>
       <Importer>TextureImporter</Importer>
