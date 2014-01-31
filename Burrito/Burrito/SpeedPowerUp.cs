@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Burrito
 {
-    class SpeedPowerUp: Powerup
+    class SpeedPowerUp: PowerUp
     {
         Texture2D myTexture;
         public SpeedPowerUp(int x, int y) : base(x, y)
