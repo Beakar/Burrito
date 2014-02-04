@@ -15,7 +15,7 @@ namespace Burrito
         protected Vector2 size = new Vector2(POWER_UP_SIZE, POWER_UP_SIZE);//powerup size
         protected Rectangle rectHitBox;
         protected Texture2D texture;
-     
+
         public PowerUp(int x, int y, Texture2D texture)
         {
             this.texture = texture;
@@ -30,12 +30,12 @@ namespace Burrito
                 Color.White);
         }
 
-        public Rectangle hitBox 
+        public Rectangle hitBox
         {
             get { return rectHitBox; }
         }
 
-        
+
 
     }
 }
