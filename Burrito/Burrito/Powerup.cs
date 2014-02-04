@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Burrito
 {
-    abstract class PowerUp
+    public class PowerUp
     {
         protected Vector2 position = new Vector2(0, 0);
         protected Vector2 size = new Vector2(0, 0);
