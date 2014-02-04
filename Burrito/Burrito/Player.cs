@@ -32,8 +32,9 @@ namespace Burrito
                 if (_isSliding)
                 {
                     currentFrame.X = sheetSize.X - 1;
+                    currentFrame.Y = sheetSize.Y - 1;
                     if (position.Y <= 290)
-                        position.Y += 15;
+                        position.Y += 25;
                 }
                 else
                 {
@@ -47,7 +48,7 @@ namespace Burrito
         private float frameRate = 0.1f;
         //Sprite Sheet info (Each point is a position on the Sprite Sheet)
         private Point frameSize = new Point(200, 200);
-        private Point currentFrame = new Point(0, 0);
+        private Point currentFrame = new Point(0, 2);
         private Point sheetSize = new Point(5, 4);
         //Sound Info
         SoundEffect[] sound = new SoundEffect[1];
@@ -67,7 +68,7 @@ namespace Burrito
             framesElapsed = 0.0f;
             frameRate = 0.1f;
             frameSize = new Point(200, 200);
-            currentFrame = new Point(0, 0);
+            currentFrame = new Point(0, 2);
             sheetSize = new Point(5, 4);
         }
 
@@ -90,10 +91,13 @@ namespace Burrito
                     //++currentFrame.Y;
                     if (currentFrame.Y >= sheetSize.Y)
                     {
-                        currentFrame.Y = 0;
+                        currentFrame.Y = 2;
                     }
                 }
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down) && IsSliding == false && hasJumped == false)
+                sound[1].Play();
 
             //The player will slide when he presses Keys.Down
             if (Keyboard.GetState().IsKeyDown(Keys.Down))

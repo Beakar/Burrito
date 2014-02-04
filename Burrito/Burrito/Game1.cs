@@ -23,7 +23,7 @@ namespace Burrito
 
         int iPlayerScore = 0;
         //Array of Obstacles (Current size: 1)
-        Obstacle[] obstacles = new Obstacle[1];
+        Obstacle[] obstacles = new Obstacle[3];
 
         public Game1()
         {
@@ -61,12 +61,17 @@ namespace Burrito
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
 
             obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
-                                     new Vector2(1000, 275));                        //At (1000,275)
+                                     new Vector2(2000, 250));                        //At (1000,275)
+            obstacles[1] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                     new Vector2(3000, 150));                        //At (1000,275)
+            obstacles[2] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                     new Vector2(4000, 250));                        //At (1000,275)
 
-            SoundEffect[] sound = new SoundEffect[1];
+            SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
+            sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
             player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito2"), new Vector2(100, 275), sound);  //Load Player
-            player.soundtrack = Content.Load<Song>(@"Sound\soundtrack2");  //Load Game Soundtrack
+            player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");  //Load Game Soundtrack
             MediaPlayer.Play(player.soundtrack);  //Play Soundtrack...
             MediaPlayer.IsRepeating = true;       //On Repeat
             myBackground.Load(GraphicsDevice, background);
@@ -94,6 +99,8 @@ namespace Burrito
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
             obstacles[0].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
+            obstacles[1].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
+            obstacles[2].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
             player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
@@ -110,16 +117,21 @@ namespace Burrito
 
             myBackground.Draw(spriteBatch);
             obstacles[0].Draw(spriteBatch);
-            if (!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+            obstacles[1].Draw(spriteBatch);
+            obstacles[2].Draw(spriteBatch);
+            foreach (Obstacle x in obstacles)
             {
-                player.Draw(spriteBatch);
+                if (!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+                {
+                    player.Draw(spriteBatch);
+                }
+                else
+                {
+                    this.Exit();
+                    player.SetDefaults();
+                }
             }
-            else
-            {
-                this.Exit();
-                player.SetDefaults();
-            }
-
+            
             //Don't call anything after this line
             spriteBatch.End();
             base.Draw(gameTime);
