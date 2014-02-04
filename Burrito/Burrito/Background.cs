@@ -14,8 +14,8 @@ namespace Burrito
         private Vector2 screenpos, origin, texturesize;
         private Texture2D mytexture;
         private Texture2D rect;//floor texture
-        private int screenheight;
-        private int screenwidth;
+        public static int screenheight;
+        public static int screenwidth;
         public void Load(GraphicsDevice device, Texture2D backgroundTexture)
         {
             rect = new Texture2D(device, 1280, 30);//create a texture for the floor

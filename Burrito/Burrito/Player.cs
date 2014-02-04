@@ -14,8 +14,8 @@ namespace Burrito
     class Player
     {
         private Texture2D player;
-        private Vector2 position;
-        private Vector2 velocity;
+        public Vector2 position;
+        public Vector2 velocity;
         //Have we already jumped
         private bool hasJumped;
         //FrameRate info
