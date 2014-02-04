@@ -29,6 +29,11 @@ namespace Burrito
             Content.RootDirectory = "Content";
         }
 
+        public void StartNewGame()
+        {
+
+        }
+
         // Allows the game to perform any initialization it needs to before starting to run.
         // This is where it can query for any required services and load any non-graphic
         // related content.  Calling base.Initialize will enumerate through any components

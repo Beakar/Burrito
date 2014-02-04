@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Burrito
 {
-    class Obstacle : EncounteredObject
+    public class Obstacle : EncounteredObject
     {
         //An Obstacle is an EncounteredObject
         //An Obstacle doesn't need anything extra of its own *yet*
