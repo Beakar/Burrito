@@ -24,7 +24,7 @@ namespace Burrito
             position = newPos;
             size = new Vector2(texture.Width, texture.Height);
             //The hitbox is a rectangle 3/4 the size of the texture
-            hitbox = new Rectangle((int)(position.X-(size.X *.6)), (int)(position.Y + (size.Y *.3)), (int)(size.X *.8), (int)(size.Y *.8));
+            hitbox = new Rectangle((int)(position.X-(size.X *.75)), (int)(position.Y + (size.Y *.25)), (int)(size.X *.9), (int)(size.Y *.9));
         }
 
         public void Draw(SpriteBatch sb)
