@@ -24,7 +24,7 @@ namespace Burrito
             position = newPos;
             size = new Vector2(texture.Width, texture.Height);
             //The hitbox is a rectangle 3/4 the size of the texture
-            hitbox = new Rectangle((int)(position.X+(size.X*.25)), (int)(position.Y+(size.Y*.25)), (int)(size.X*.75), (int)(size.Y*.75));
+            hitbox = new Rectangle((int)(position.X-(size.X *.6)), (int)(position.Y + (size.Y *.3)), (int)(size.X *.8), (int)(size.Y *.8));
         }
 
         public void Draw(SpriteBatch sb)
@@ -42,14 +42,15 @@ namespace Burrito
         public void Update(float deltaX)
         {
             position.X -= deltaX;
+            hitbox.X -= (int)deltaX;
         }
 
         //Checks if the hitbox was touched
         public bool WasHit(int x, int y)
         {
-            if (x > hitbox.X || x < (hitbox.X + hitbox.Width))
+            if (x > hitbox.X && x < (hitbox.X + hitbox.Width))
             {
-                if (y > hitbox.Y)
+                if (y < hitbox.Y && y > hitbox.Y - hitbox.Height)
                     return true;
             }
             return false;
