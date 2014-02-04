@@ -103,8 +103,15 @@ namespace Burrito
 
             myBackground.Draw(spriteBatch);
             obstacles[0].Draw(spriteBatch);
-            if(!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+            if (!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+            {
                 player.Draw(spriteBatch);
+            }
+            else
+            {
+                this.Exit();
+                player.SetDefaults();
+            }
 
             //Don't call anything after this line
             spriteBatch.End();
