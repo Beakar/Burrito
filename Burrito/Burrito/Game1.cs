@@ -23,7 +23,8 @@ namespace Burrito
         //PLAYER
         Player player;
         //Array of Obstacles (Current size: 1)
-        Obstacle[] obstacles = new Obstacle[1];
+        Obstacle obstacle;
+        List<Obstacle> obstacles = new List<Obstacle>();
 
         public Game1()
         {
@@ -59,8 +60,9 @@ namespace Burrito
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
 
-            obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"),  //Load Obstacle
+            Obstacle obstacle = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"),  //Load Obstacle
                                      new Vector2(500, 275));
+            obstacles.Add(obstacle);
 
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -97,7 +99,7 @@ namespace Burrito
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 200); //Update the background based on time elapsed
-            obstacles[0].Update(0);                //Update the obstacles based on time elapsed
+            //obstacle.Update(0);                //Update the obstacles based on time elapsed
 
             player.Update(gameTime);            //Update player Sprite
             base.Update(gameTime);
