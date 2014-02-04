@@ -35,7 +35,7 @@ namespace Burrito
         // and initialize them as well.
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            //Creates our preferred screen size
             graphics.PreferredBackBufferHeight = 600;
             graphics.PreferredBackBufferWidth = 1000;
             graphics.ApplyChanges();
@@ -81,14 +81,13 @@ namespace Burrito
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
             // The time since Update was called last.
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
-            obstacles[0].Update(5);             //Update the obstacles based a set float (keep this float small
-            player.Update(gameTime);            //Update player Sprite
+            obstacles[0].Update(5);             //Update the obstacles based a set float (keep this float small)
+            player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
         }

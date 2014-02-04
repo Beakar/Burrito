@@ -44,10 +44,14 @@ namespace Burrito
             position.X -= deltaX;
         }
 
-        //Creates a hitbox for our Obstacle
         //Checks if the hitbox was touched
-        public bool wasHit()
+        public bool WasHit(int x, int y)
         {
+            if (x > hitbox.X || x < (hitbox.X + hitbox.Width))
+            {
+                if (y > hitbox.Y)
+                    return true;
+            }
             return false;
         }
     }
