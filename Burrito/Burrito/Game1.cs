@@ -20,6 +20,8 @@ namespace Burrito
         Background myBackground;
         //PLAYER
         Player player;
+
+        int iPlayerScore = 0;
         //Array of Obstacles (Current size: 1)
         Obstacle[] obstacles = new Obstacle[1];
 
