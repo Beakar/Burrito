@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Burrito
 {
-    class EncounteredObject
+    public class EncounteredObject
     {
         protected Texture2D texture;  //The texture that this Obstacle uses
         protected Vector2 position;   //The postion that the Obstacle will be drawn (x,y)
