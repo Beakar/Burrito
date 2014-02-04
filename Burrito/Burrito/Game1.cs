@@ -93,7 +93,7 @@ namespace Burrito
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
-            obstacles[0].Update((float)6.5);             //Update the obstacles based a set float (keep this float small)
+            obstacles[0].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
             player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
