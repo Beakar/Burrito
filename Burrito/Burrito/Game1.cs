@@ -23,7 +23,7 @@ namespace Burrito
 
         int iPlayerScore = 0;
         //Array of Obstacles (Current size: 1)
-        Obstacle[] obstacles = new Obstacle[1];
+        Obstacle[] obstacles = new Obstacle[3];
 
         public Game1()
         {
@@ -62,6 +62,11 @@ namespace Burrito
 
             obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
                                      new Vector2(1000, 275));                        //At (1000,275)
+            obstacles[1] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                    new Vector2(2000, 150));                        //At (1000,275)
+            obstacles[2] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                    new Vector2(3000, 275));                        //At (1000,275)
+
 
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -94,6 +99,8 @@ namespace Burrito
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
             obstacles[0].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
+            obstacles[1].Update((float)7.5);
+            obstacles[2].Update((float)7.5);
             player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
@@ -110,15 +117,21 @@ namespace Burrito
 
             myBackground.Draw(spriteBatch);
             obstacles[0].Draw(spriteBatch);
-            if (!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+            obstacles[1].Draw(spriteBatch);
+            obstacles[2].Draw(spriteBatch);
+            foreach (Obstacle x in obstacles)
             {
-                player.Draw(spriteBatch);
+                if (!(x.WasHit((int)player.position.X, (int)player.position.Y)))
+                {
+                    player.Draw(spriteBatch);
+                }
+                else
+                {
+                    this.Exit();
+                    player.SetDefaults();
+                }
             }
-            else
-            {
-                this.Exit();
-                player.SetDefaults();
-            }
+            
 
             //Don't call anything after this line
             spriteBatch.End();
