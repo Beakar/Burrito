@@ -22,6 +22,7 @@ namespace Burrito
         //BACKGROUND
         Background myBackground;
         Player player;
+        List<PowerUp> powerUps;
 
         Obstacle obstacles;
 
