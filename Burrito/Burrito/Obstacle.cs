@@ -26,10 +26,12 @@ namespace Burrito
 
         public void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, 
-                    position, 
-                    null,
-                    Color.White);
+            //Don't Draw Obstacles that pass the player
+            if(position.X < Background.screenwidth)
+            {
+                sb.Draw(texture, position, null, Color.White);
+            }
+                
         }
 
         //UPDATE
