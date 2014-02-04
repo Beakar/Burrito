@@ -37,7 +37,6 @@ namespace Burrito
         public void Update(float deltaX)
         {
             position.X -= deltaX;
-            position.X = position.X % size.X;
         }
     }
 }

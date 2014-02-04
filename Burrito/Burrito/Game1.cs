@@ -11,9 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Burrito
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+    // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -31,12 +29,10 @@ namespace Burrito
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+        // Allows the game to perform any initialization it needs to before starting to run.
+        // This is where it can query for any required services and load any non-graphic
+        // related content.  Calling base.Initialize will enumerate through any components
+        // and initialize them as well.
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -46,10 +42,8 @@ namespace Burrito
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+        // LoadContent will be called once per game and is the place to load
+        // all of your content.
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -59,8 +53,8 @@ namespace Burrito
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
 
-            obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"),  //Load Obstacle
-                                     new Vector2(500, 275));
+            obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                     new Vector2(500, 275));                        //At (500,275)
 
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -71,20 +65,16 @@ namespace Burrito
             myBackground.Load(GraphicsDevice, background);
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
+        // UnloadContent will be called once per game and is the place to unload
+        // all content.
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        // Allows the game to run logic such as updating the world,
+        // checking for collisions, gathering input, and playing audio.
+        // Parameter<gameTime>: Provides a snapshot of timing values.
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
@@ -96,17 +86,15 @@ namespace Burrito
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // TODO: Add your game logic here.
-            myBackground.Update(elapsed * 200); //Update the background based on time elapsed
-            obstacles[0].Update(0);                //Update the obstacles based on time elapsed
-
+            myBackground.Update(elapsed * 300); //Update the background based on time elapsed
+            obstacles[0].Update(5);  //Update the obstacles based a set float (keep this float small
             player.Update(gameTime);            //Update player Sprite
+
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        // This is called when the game should draw itself.
+        // Parameter<gameTime>: Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -114,8 +102,8 @@ namespace Burrito
             spriteBatch.Begin();
             //Draw Stuff below this line
             myBackground.Draw(spriteBatch);
-            player.Draw(spriteBatch);
             obstacles[0].Draw(spriteBatch);
+            player.Draw(spriteBatch);
 
             //Don't call anything after this line
             spriteBatch.End();
