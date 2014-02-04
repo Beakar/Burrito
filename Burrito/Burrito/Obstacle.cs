@@ -14,14 +14,14 @@ namespace Burrito
     class Obstacle
     {
         protected Texture2D obstacle;
-        protected Vector2 position = new Vector2(0,0);
-        protected Vector2 size = new Vector2(100,100);
+        protected Vector2 position;
+        protected Vector2 size;
 
-        public Obstacle(Texture2D newTexture, Vector2 newPos, Vector2 newSize)
+        public Obstacle(Texture2D newTexture, Vector2 newPos)
         {
             obstacle = newTexture;
             position = newPos;
-            size = newSize;
+            size = new Vector2(obstacle.Width, obstacle.Height);
         }
 
         public void Draw(SpriteBatch sb)
@@ -29,6 +29,12 @@ namespace Burrito
             sb.Draw(obstacle, position, 
                 new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y),
                 Color.White);
+        }
+
+        public void Update(float deltaX)
+        {
+            position.X -= deltaX;
+            position.X = position.X % obstacle.Width;
         }
     }
 }

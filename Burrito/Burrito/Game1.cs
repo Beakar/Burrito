@@ -24,6 +24,8 @@ namespace Burrito
         Player player;
         List<PowerUp> powerUps;
 
+        Obstacle obstacles;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -60,7 +62,12 @@ namespace Burrito
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");
             player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100,275), sound);
+
             player.soundtrack = Content.Load<Song>(@"Sound\soundtrack2");
+
+            obstacles = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"),
+                new Vector2(200, 275));
+
             MediaPlayer.Play(player.soundtrack);
             MediaPlayer.IsRepeating = true;
             myBackground.Load(GraphicsDevice, background);
@@ -91,7 +98,9 @@ namespace Burrito
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // TODO: Add your game logic here.
-            myBackground.Update(elapsed * 350);
+            myBackground.Update(elapsed * 200);
+            obstacles.Update(elapsed * 200);
+
             player.Update(gameTime);
             base.Update(gameTime);
         }
@@ -107,6 +116,7 @@ namespace Burrito
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             myBackground.Draw(spriteBatch);
+            obstacles.Draw(spriteBatch);
             player.Draw(spriteBatch);
             spriteBatch.End();
             
