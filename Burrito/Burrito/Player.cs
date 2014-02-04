@@ -55,10 +55,20 @@ namespace Burrito
 
         public Player(Texture2D newTexture, Vector2 newPosition, SoundEffect[] sounds)
         {
+            SetDefaults();
             sound = sounds;
             player = newTexture;
             position = newPosition;
             hasJumped = true;
+        }
+
+        public void SetDefaults()
+        {
+            framesElapsed = 0.0f;
+            frameRate = 0.1f;
+            frameSize = new Point(200, 200);
+            currentFrame = new Point(0, 0);
+            sheetSize = new Point(5, 4);
         }
 
         public void Update(GameTime gametime)
