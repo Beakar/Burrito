@@ -33,7 +33,7 @@ namespace Burrito
                 {
                     currentFrame.X = sheetSize.X - 1;
                     if (position.Y <= 290)
-                        position.Y += 25;
+                        position.Y += 15;
                 }
                 else
                 {
