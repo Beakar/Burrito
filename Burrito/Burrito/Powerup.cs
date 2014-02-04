@@ -10,23 +10,32 @@ namespace Burrito
 {
     public class PowerUp
     {
-        protected Vector2 position = new Vector2(0, 0);
-        protected Vector2 size = new Vector2(0, 0);
-        protected Rectangle hitBox;
+        public static int POWER_UP_SIZE = 30;
+        protected Vector2 position;
+        protected Vector2 size = new Vector2(POWER_UP_SIZE, POWER_UP_SIZE);//powerup size
+        protected Rectangle rectHitBox;
+        protected Texture2D texture;
 
-        public PowerUp(Vector2 newPos, Vector2 newSize)
+        public PowerUp(int x, int y, Texture2D texture)
         {
-            position = newPos;
-            size = newSize;
-            hitBox = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+            this.texture = texture;
+            position = new Vector2(x, y);
+            rectHitBox = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
         }
 
-        public void Draw(SpriteBatch spritebatch);
-
-        public Rectangle getHitbox()
+        //general draw method for powerups, pass in a texture in the subclass
+        public void Draw(SpriteBatch spritebatch)
         {
-            return hitBox;
+            spritebatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y),
+                Color.White);
         }
+
+        public Rectangle hitBox 
+        {
+            get { return rectHitBox; }
+        }
+
+        
 
     }
 }
