@@ -54,7 +54,7 @@ namespace Burrito
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
 
             obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
-                                     new Vector2(500, 275));                        //At (500,275)
+                                     new Vector2(1000, 275));                        //At (500,275)
 
             SoundEffect[] sound = new SoundEffect[1];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect

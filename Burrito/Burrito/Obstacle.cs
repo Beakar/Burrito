@@ -26,8 +26,8 @@ namespace Burrito
 
         public void Draw(SpriteBatch sb)
         {
-            //Don't Draw Obstacles that pass the player
-            if(position.X < Background.screenwidth)
+            //Don't Draw Obstacles unless they are onscreen
+            if((position.X + size.X) > 0 || position.X < Background.screenwidth)
             {
                 sb.Draw(texture, position, null, Color.White);
             }
