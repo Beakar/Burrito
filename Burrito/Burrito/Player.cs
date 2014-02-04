@@ -18,6 +18,30 @@ namespace Burrito
         public Vector2 velocity;
         //Have we already jumped
         private bool hasJumped;
+
+        private bool _isSliding;
+        public bool IsSliding
+        {
+            get
+            {
+                return _isSliding; 
+            }
+            set
+            {
+                _isSliding = value;
+                if (_isSliding)
+                {
+                    currentFrame.X = sheetSize.X - 1;
+                    if (position.Y <= 290)
+                        position.Y += 25;
+                }
+                else
+                {
+                    position.Y -= 25;
+                }
+
+            }
+        }
         //FrameRate info
         private float framesElapsed = 0.0f;
         private float frameRate = 0.1f;
@@ -71,7 +95,19 @@ namespace Burrito
                 }
             }
 
-             if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
+            //The player will slide when he presses Keys.Down
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                IsSliding = true;
+
+            //Sliding will end when player lets go of Keys.Down
+            if (Keyboard.GetState().IsKeyUp(Keys.Down) && IsSliding)
+                IsSliding = false;
+
+            //Uses the Jumping Sprite when you press Keys.Up
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                currentFrame.X = sheetSize.X - 2;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
             {
                 position.Y -= 20f;  //Initial Jump Speed (Curr: 20f / only change this value)
                 velocity.Y = -15f;  //Initial Jump velocity (Curr: -15f / Value must be <0f)
