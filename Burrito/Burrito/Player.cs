@@ -16,18 +16,17 @@ namespace Burrito
         private Texture2D player;
         private Vector2 position;
         private Vector2 velocity;
+        //Have we already jumped
         private bool hasJumped;
-
         //FrameRate info
-        private float fElapsed = 0.0f;
+        private float framesElapsed = 0.0f;
         private float frameRate = 0.1f;
         //Sprite Sheet info (Each point is a position on the Sprite Sheet)
         private Point frameSize = new Point(200, 200);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(5, 4);
-
+        //Sound Info
         SoundEffect[] sound = new SoundEffect[1];
-
         public Song soundtrack { get; set; }
 
         public Player(Texture2D newTexture, Vector2 newPosition, SoundEffect[] sounds)
@@ -42,13 +41,14 @@ namespace Burrito
         {
             position += velocity;
 
-            fElapsed += (float)gametime.ElapsedGameTime.TotalSeconds;
+            framesElapsed += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (fElapsed > frameRate)
+            if (framesElapsed > frameRate)
             {
-                fElapsed -= frameRate;
+                framesElapsed -= frameRate;
                 //Moves the Source Rectangle
 
+                //Cycle through the sprite sheet
                 ++currentFrame.X;
                 if (currentFrame.X >= sheetSize.X - 2)
                 {
@@ -84,10 +84,10 @@ namespace Burrito
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(player, position, new Rectangle(currentFrame.X * frameSize.X, 
-                currentFrame.Y * frameSize.Y,
-                frameSize.X, frameSize.Y),
-                Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            spritebatch.Draw(player,
+                             position,
+                             new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y),
+                             Color.White);
         }
     }
 }
