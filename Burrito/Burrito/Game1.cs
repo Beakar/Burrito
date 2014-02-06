@@ -16,8 +16,6 @@ namespace Burrito
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D obstacleArt;
-        Texture2D speedPowerupArt;
         //BACKGROUND
         Background myBackground;
         //PLAYER
@@ -25,7 +23,7 @@ namespace Burrito
 
         int iPlayerScore = 0;
         //Array of Obstacles (Current size: 1)
-        List<Obstacle> obstacles = new List<Obstacle>();
+        Obstacle[] obstacles = new Obstacle[3];
 
         public Game1()
         {
@@ -60,16 +58,14 @@ namespace Burrito
 
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
-            speedPowerupArt = Content.Load<Texture2D>(@"Textures\jalapeno");//load speed powerup
-            obstacleArt = Content.Load<Texture2D>(@"Textures\angry");
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
 
-            obstacles.Add(new Obstacle(obstacleArt, //Load Obstacle
-                                     new Vector2(2000, 250)));                        //At (1000,275)
-            obstacles.Add(new Obstacle(obstacleArt, //Load Obstacle
-                                     new Vector2(3000, 150)));                        //At (1000,275)
-            obstacles.Add(new Obstacle(obstacleArt, //Load Obstacle
-                                     new Vector2(4000, 250)));                        //At (1000,275)
+            obstacles[0] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                     new Vector2(2000, 250));                        //At (1000,275)
+            obstacles[1] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                     new Vector2(3000, 150));                        //At (1000,275)
+            obstacles[2] = new Obstacle(Content.Load<Texture2D>(@"Textures\angry"), //Load Obstacle
+                                     new Vector2(4000, 250));                        //At (1000,275)
 
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -102,12 +98,9 @@ namespace Burrito
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
-
-            foreach (Obstacle ob in obstacles)
-            {
-                ob.Update((float)7.5); //Update the obstacles based a set float (keep this float small)
-            }
-
+            obstacles[0].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
+            obstacles[1].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
+            obstacles[2].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
             player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
@@ -128,10 +121,12 @@ namespace Burrito
             obstacles[2].Draw(spriteBatch);
             foreach (Obstacle x in obstacles)
             {
-                if (!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+                if (x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
                 {
-                    player.Draw(spriteBatch);
+                    break;
                 }
+                else
+                    player.Draw(spriteBatch);
                 //else
                 //{
                 //    this.Exit();
