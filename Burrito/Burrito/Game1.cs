@@ -98,9 +98,9 @@ namespace Burrito
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
-            obstacles[0].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
-            obstacles[1].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
-            obstacles[2].Update((float)7.5);             //Update the obstacles based a set float (keep this float small)
+            obstacles[0].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
+            obstacles[1].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
+            obstacles[2].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
             player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
@@ -121,15 +121,17 @@ namespace Burrito
             obstacles[2].Draw(spriteBatch);
             foreach (Obstacle x in obstacles)
             {
-                if (!(obstacles[0].WasHit((int)player.position.X, (int)player.position.Y)))
+                if (x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
                 {
-                    player.Draw(spriteBatch);
+                    break;
                 }
                 else
-                {
-                    this.Exit();
-                    player.SetDefaults();
-                }
+                    player.Draw(spriteBatch);
+                //else
+                //{
+                //    this.Exit();
+                //    player.SetDefaults();
+                //}
             }
             
             //Don't call anything after this line
