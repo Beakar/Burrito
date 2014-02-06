@@ -11,8 +11,8 @@ namespace Burrito
     class SpeedPowerUp: PowerUp
     {
         Texture2D myTexture;
-        public SpeedPowerUp(int x, int y, Texture2D texture)
-            : base(x, y, texture)
+        public SpeedPowerUp(Texture2D newTexture, Vector2 newPos)
+            : base(newTexture, newPos)
         { }
         
         
