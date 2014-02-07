@@ -110,7 +110,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\jalapeno.jpg">
+    <Compile Include="Textures\jalapeno.png">
       <Name>jalapeno</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

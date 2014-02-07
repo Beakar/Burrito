@@ -13,21 +13,26 @@ namespace Burrito
         //An Powerup is an EncounteredObject
         //An Powerup doesn't need anything extra of its own *yet*
 
-        public bool bBeenHit;
+        public bool beenHit;
         public PowerUp(Texture2D newTexture, Vector2 newPos)
             : base(newTexture, newPos)
-        {}
-
-        //only draw before it's been hit (make sure to change been hit to false when it is hit)
-        public override void Draw(SpriteBatch sb){
-            if (beenHit == true)
-                base.Draw(sb);
+        {
+           // beenHit = false;
         }
 
-        bool beenHit
+        //only draw before it's been hit (make sure to change been hit to false when it is hit)
+        public new void Draw(SpriteBatch sb)
         {
-            get { return bBeenHit; }
-            set { beenHit = bBeenHit; }
+            if (beenHit == false)
+            {
+                base.Draw(sb);
+            }
+        }
+
+        public  bool BeenHit
+        {
+            get { return beenHit; }
+            set { beenHit = BeenHit; }
 
         }
 

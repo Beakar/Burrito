@@ -10,14 +10,11 @@ namespace Burrito
 {
     class SpeedPowerUp: PowerUp
     {
-        Texture2D myTexture;
         public SpeedPowerUp(Texture2D newTexture, Vector2 newPos)
             : base(newTexture, newPos)
         { }
         
         
-        public void Draw(SpriteBatch spriteBatch){
-            base.Draw(spriteBatch);
-        }
+        
     }
 }

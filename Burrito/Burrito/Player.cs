@@ -13,13 +13,26 @@ namespace Burrito
 {
     class Player
     {
+        private static int NO_PUP = -1;
+        private static int SPEED_PUP = 0;
+        bool hasSpeedBoost;
+        int speedBoostTimer;
         private Texture2D player;
         public Vector2 position;
         public Vector2 velocity;
+        public int hasPowerUp;
         //Have we already jumped
         private bool hasJumped;
 
+
         private bool _isSliding;
+
+        public int HasPowerUp
+        {
+            get { return hasPowerUp; }
+            set { hasPowerUp = HasPowerUp; }
+        }
+
         public bool IsSliding
         {
             get
@@ -61,6 +74,7 @@ namespace Burrito
             player = newTexture;
             position = newPosition;
             hasJumped = true;
+            
         }
 
         public void SetDefaults()
@@ -70,6 +84,7 @@ namespace Burrito
             frameSize = new Point(200, 200);
             currentFrame = new Point(0, 0);
             sheetSize = new Point(5, 4);
+            hasPowerUp = NO_PUP;
         }
 
         public void Update(GameTime gametime)
@@ -130,6 +145,25 @@ namespace Burrito
 
             if (hasJumped == false)
                 velocity.Y = 0f;
+
+            switch (hasPowerUp)
+            {
+                case -1:
+                    break;
+                case 0:
+                    hasSpeedBoost = true;
+                    velocity.X += 10f; 
+                    speedBoostTimer = 100; //how long the speed boost lasts
+                    break;
+                default:
+                    break;
+            }
+            if (hasSpeedBoost && speedBoostTimer > 0)
+            {
+                velocity.X += 0.5f; 
+            }
+
+
         }
 
         public void Draw(SpriteBatch spritebatch)
