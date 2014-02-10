@@ -80,13 +80,8 @@ namespace Burrito
             powerUps.Add(new SpeedPowerUp(speedPUpTex,
                                             new Vector2(5400, 250)));
 
-
-            obstacles.Add(new Obstacle(obstacleTex, //Load Obstacle
-                                     new Vector2(2000, 250))); 
-            obstacles.Add(new Obstacle(obstacleTex, //Load Obstacle
-                                     new Vector2(3500, 100)));
-            obstacles.Add(new Obstacle(obstacleTex, //Load Obstacle
-                                     new Vector2(5000, 250)));
+            //Load the obstacles
+            LoadObstacles(20, 0);
 
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -117,13 +112,15 @@ namespace Burrito
             // The time since Update was called last.
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
+            
+            //Obstacle Updating
             foreach (Obstacle x in obstacles)
             {
-                x.Update((float)7);
+                x.Update((float)8);
             }
 
+            //PowerUP updating
             foreach (PowerUp x in powerUps)
             {
                 x.Update((float)7);
@@ -143,6 +140,8 @@ namespace Burrito
             //Draw Stuff below this line
 
             myBackground.Draw(spriteBatch);
+
+            //ENCOUNTERED OBJECT DRAWING LOGIC
             foreach (Obstacle x in obstacles)
             {
                 if (x.position.X + x.size.X < 0)
@@ -163,6 +162,8 @@ namespace Burrito
                 x.Draw(spriteBatch);
             }
 
+
+            //PLAYER DRAWING LOGIC
             foreach (PowerUp x in powerUps)
             {
                 if (x.BeenHit == false && x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
@@ -191,6 +192,24 @@ namespace Burrito
             //Don't call anything after this line
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        //Loads a given number of Obstacles
+        protected void LoadObstacles(int numObstacles, int lastPosition)
+        {
+            Random generator = new Random();
+            for (int i = 0; i < numObstacles; ++i)
+            {
+                int rand = generator.Next(0, 50);
+                //Spawn on Floor
+                if (rand < 30)
+                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1300, 300)));
+                //Spawn in Air
+                else
+                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1300, 100)));
+                //Increment the spawn location
+                lastPosition += 1300;
+            }
         }
     }
 }
