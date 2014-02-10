@@ -30,8 +30,8 @@ namespace Burrito
 
         int iPlayerScore = 0;
         //Array of Obstacles (Current size: 1)
-        Obstacle[] obstacles = new Obstacle[3];
-        PowerUp[] powerUps = new PowerUp[3];
+        List<Obstacle> obstacles = new List<Obstacle>();
+        List<PowerUp> powerUps = new List<PowerUp>();
 
         public Game1()
         {
@@ -73,20 +73,20 @@ namespace Burrito
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
            //powerups
 
-            powerUps[0] = new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(2400, 250));
-            powerUps[1] = new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(3400, 250));
-            powerUps[2] = new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(4400, 250));
+            powerUps.Add(new SpeedPowerUp(speedPUpTex,
+                                            new Vector2(2400, 250)));
+            powerUps.Add(new SpeedPowerUp(speedPUpTex,
+                                            new Vector2(3900, 250)));
+            powerUps.Add(new SpeedPowerUp(speedPUpTex,
+                                            new Vector2(5400, 250)));
 
 
-            obstacles[0] = new Obstacle(obstacleTex, //Load Obstacle
-                                     new Vector2(2000, 250));                        //At (1000,275)
-            obstacles[1] = new Obstacle(obstacleTex, //Load Obstacle
-                                     new Vector2(3000, 150));                        //At (1000,275)
-            obstacles[2] = new Obstacle(obstacleTex, //Load Obstacle
-                                     new Vector2(4000, 250));                        //At (1000,275)
+            obstacles.Add(new Obstacle(obstacleTex, //Load Obstacle
+                                     new Vector2(2000, 250))); 
+            obstacles.Add(new Obstacle(obstacleTex, //Load Obstacle
+                                     new Vector2(3500, 100)));
+            obstacles.Add(new Obstacle(obstacleTex, //Load Obstacle
+                                     new Vector2(5000, 250)));
 
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -119,12 +119,15 @@ namespace Burrito
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 300); //Update the background based on time elapsed
-            obstacles[0].Update((float)7.5);    //Update the obstacles based a set float (keep this float small)
-            obstacles[1].Update((float)7.5);    //Upd based a set float (keep this float small)ate the obstacles based a set float (keep this float small)
-            obstacles[2].Update((float)7.5);    //Update the obstacles
-            powerUps[0].Update((float)7.5);    
-            powerUps[1].Update((float)7.5);    
-            powerUps[2].Update((float)7.5);
+            foreach (Obstacle x in obstacles)
+            {
+                x.Update((float)7);
+            }
+
+            foreach (PowerUp x in powerUps)
+            {
+                x.Update((float)7);
+            }
             player.Update(gameTime);            //Update player's sprite
 
             base.Update(gameTime);
@@ -140,12 +143,26 @@ namespace Burrito
             //Draw Stuff below this line
 
             myBackground.Draw(spriteBatch);
-            obstacles[0].Draw(spriteBatch);
-            obstacles[1].Draw(spriteBatch);
-            obstacles[2].Draw(spriteBatch);
-            powerUps[0].Draw(spriteBatch);
-            powerUps[1].Draw(spriteBatch);
-            powerUps[2].Draw(spriteBatch);
+            foreach (Obstacle x in obstacles)
+            {
+                if (x.position.X + x.size.X < 0)
+                {
+                    obstacles.Remove(x);
+                    break;
+                }
+                x.Draw(spriteBatch);
+            }
+
+            foreach (PowerUp x in powerUps)
+            {
+                if (x.position.X + x.size.X < 0)
+                {
+                    powerUps.Remove(x);
+                    break;
+                }
+                x.Draw(spriteBatch);
+            }
+
             foreach (PowerUp x in powerUps)
             {
                 if (x.BeenHit == false && x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
@@ -155,17 +172,16 @@ namespace Burrito
             }
             foreach (Obstacle x in obstacles)
             {
-                if (x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
+                if (x.WasHit((int)player.position.X+80, (int)player.position.Y + 20, 100, 160))
                 {
                     break;
                 }
                 else
                     player.Draw(spriteBatch);
-                //else
-                //{
-                //    this.Exit();
-                //    player.SetDefaults();
-                //}
+            }
+            if (obstacles.Count == 0)
+            {
+                player.Draw(spriteBatch);
             }
             
             //Don't call anything after this line
