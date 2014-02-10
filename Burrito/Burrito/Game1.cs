@@ -172,7 +172,11 @@ namespace Burrito
             }
             foreach (Obstacle x in obstacles)
             {
-                if (x.WasHit((int)player.position.X+80, (int)player.position.Y + 20, 100, 160))
+                if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
+                {
+                    break;
+                }
+                else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
                     break;
                 }
