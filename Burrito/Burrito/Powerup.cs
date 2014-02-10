@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Burrito
 {
-    public class PowerUp: EncounteredObject
+    public abstract class PowerUp: EncounteredObject
     {
         //An Powerup is an EncounteredObject
         //An Powerup doesn't need anything extra of its own *yet*
@@ -23,18 +23,13 @@ namespace Burrito
         //only draw before it's been hit (make sure to change been hit to false when it is hit)
         public new void Draw(SpriteBatch sb)
         {
-            if (beenHit == false)
-            {
+           
                 base.Draw(sb);
-            }
+          
         }
 
-        public  bool BeenHit
-        {
-            get { return beenHit; }
-            set { beenHit = BeenHit; }
 
-        }
+        public abstract int getPowerUp();//abstract method for all powerups to return their constant
 
 
     }

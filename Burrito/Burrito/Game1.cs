@@ -15,6 +15,7 @@ namespace Burrito
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         public static int SPEED_PUP = 0;
+        public static int JUMP_PUP = 1;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -73,16 +74,13 @@ namespace Burrito
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
            //powerups
 
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(2400, 250)));
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(3900, 250)));
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(5400, 250)));
+            
+         
 
             //Load the obstacles
             LoadObstacles(20, 0);
-
+            //load powerups
+            LoadPowerups(20, 0);
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
             sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
@@ -117,13 +115,13 @@ namespace Burrito
             //Obstacle Updating
             foreach (Obstacle x in obstacles)
             {
-                x.Update((float)8);
+                x.Update(8.0f);
             }
 
             //PowerUP updating
             foreach (PowerUp x in powerUps)
             {
-                x.Update((float)7);
+                x.Update(7.0f);
             }
             player.Update(gameTime);            //Update player's sprite
 
@@ -166,9 +164,11 @@ namespace Burrito
             //PLAYER DRAWING LOGIC
             foreach (PowerUp x in powerUps)
             {
-                if (x.BeenHit == false && x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
+                if (x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
-                    x.BeenHit = true;
+                    player.HasPowerUp = x.getPowerUp();
+                    powerUps.Remove(x);
+                    break;
                 }
             }
             foreach (Obstacle x in obstacles)
@@ -209,6 +209,32 @@ namespace Burrito
                     obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1300, 100)));
                 //Increment the spawn location
                 lastPosition += 1300;
+            }
+        }
+
+        protected void LoadPowerups(int numPowerUps, int lastPosition)
+        {
+            Random generator = new Random();
+            for (int i = 0; i < numPowerUps; i++)
+            {
+                int rand = generator.Next(0, 60);
+
+                if (rand < 20)
+                {
+                    powerUps.Add(new SpeedPowerUp(speedPUpTex,
+                                                new Vector2(lastPosition + 1500, 250)));
+                }
+                else if (rand < 40)
+                {
+                    powerUps.Add(new JumpPowerUp(speedPUpTex,
+                                               new Vector2(lastPosition + 1500, 250)));//TODO Textures for new powerups
+                }
+                else
+                {
+                    powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
+                                               new Vector2(lastPosition + 1500, 250)));//TODO Textures for new powerups
+                }
+                lastPosition += 1500;
             }
         }
     }

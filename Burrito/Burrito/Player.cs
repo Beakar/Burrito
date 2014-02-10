@@ -15,6 +15,8 @@ namespace Burrito
     {
         private static int NO_PUP = -1;
         private static int SPEED_PUP = 0;
+        private static int JUMP_PUP = 1;
+        private static int X_LIFE_PUP = 2;
         bool hasSpeedBoost;
         int speedBoostTimer;
         private Texture2D player;
@@ -154,6 +156,12 @@ namespace Burrito
                     hasSpeedBoost = true;
                     velocity.X += 10f; 
                     speedBoostTimer = 100; //how long the speed boost lasts
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+                    //TODO add extra life logic when lives exist
                     break;
                 default:
                     break;

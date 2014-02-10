@@ -10,11 +10,15 @@ namespace Burrito
 {
     class SpeedPowerUp: PowerUp
     {
+        public static int SPEED_POWERUP = 0;
+
         public SpeedPowerUp(Texture2D newTexture, Vector2 newPos)
             : base(newTexture, newPos)
         { }
         
-        
-        
+       public override int getPowerUp() //using traditional getter for this, faster than c# ones in this case
+    {
+        return SPEED_POWERUP;
+    }
     }
 }
