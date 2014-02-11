@@ -14,11 +14,10 @@ namespace Burrito
     // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public static int DEFAULT_SPEED = 300;
+        public static int DEFAULT_SPEED = 400;
         public static int SPEED_RESET = -5;
         public static int NO_PUP = -1;
         public static int SPEED_PUP = 0;
-
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
         public bool hasSpeedBoost;
@@ -30,7 +29,7 @@ namespace Burrito
         SpriteBatch spriteBatch;
         //BACKGROUND
         Background myBackground;
-        int currSpeed = 300;    //The current speed of the game
+        int currSpeed = DEFAULT_SPEED;    //The current speed of the game
         int speedIncrease = 2;  //How fast the game speeds up
         //PLAYER
         Player player;
@@ -90,7 +89,7 @@ namespace Burrito
             hud.Back = Content.Load <Texture2D>(@"Textures\scoreback");
 
             //Load the PowerUps
-            LoadPowerups(5, 0);
+            LoadPowerups(8, 0);
 
             //Load the obstacles
             LoadObstacles(8, 0);
@@ -208,10 +207,10 @@ namespace Burrito
             foreach (PowerUp x in powerUps)
                 x.Draw(spriteBatch);
 
-            //Load (6) more obstacles if the amount is running low
+            //Load (3) more powerups if the amount is running low
             if (powerUps.Count < 5)
             {
-                LoadPowerups(3, (int)(powerUps[powerUps.Count - 1].position.X));
+                LoadPowerups(6, (int)(powerUps[powerUps.Count - 1].position.X));
             }
 
             //PLAYER DRAWING LOGIC//
@@ -289,7 +288,7 @@ namespace Burrito
         protected void LoadPowerups(int numPowerUps, int lastPosition)
         {
             Random generator = new Random();
-            for (int i = 0; i < numPowerUps; i++)
+            for (int i = 0; i < numPowerUps; ++i)
             {
                 int rand = generator.Next(0, 60);
                 if (rand < 20)
