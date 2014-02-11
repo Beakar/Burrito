@@ -48,7 +48,6 @@ namespace Burrito
                 if (_isSliding)
                 {
                     currentFrame.X = sheetSize.X - 1;
-                    //currentFrame.Y = sheetSize.Y - 1;
                     if (position.Y <= 290)
                         position.Y += 25;
                 }
@@ -118,7 +117,7 @@ namespace Burrito
                 sound[1].Play();
 
             //The player will slide when he presses Keys.Down
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            if (Keyboard.GetState().IsKeyDown(Keys.Down) && !hasJumped)
                 IsSliding = true;
 
             //Sliding will end when player lets go of Keys.Down
@@ -129,7 +128,7 @@ namespace Burrito
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 currentFrame.X = sheetSize.X - 2;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && hasJumped == false)
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && !hasJumped)
             {
                 position.Y -= 20f;  //Initial Jump Speed (Curr: 20f / only change this value)
                 velocity.Y = -15f;  //Initial Jump velocity (Curr: -15f / Value must be <0f)
