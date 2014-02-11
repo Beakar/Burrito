@@ -11,61 +11,23 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Burrito
 {
+    enum Screen
+    { 
+        StartScreen,
+        GamePlayScreen,
+        GameOverScreen
+    }
+
     // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public static int DEFAULT_SPEED = 475;
-        public static int SPEED_RESET = -5;
-        public static int NO_PUP = -1;
-        public static int SPEED_PUP = 0;
-        public static int JUMP_PUP = 1;
-        public static int EXTRA_LIFE_PUP = 2;
-        public static int MAX_LIVES = 5;
-        public static int DEFAULT_TIME = 500;  //Increase speed every 500ms
-        public static int POINTS_UNTIL_FATTENING = 500;  //how many points until your player gets increased weight
-
-        public bool hasSpeedBoost;
-
-        HUD hud;
-        int scorePerSecond = 1;
-        int scoreGained = 0;
-
-        AnimatedSprite explosion;
-        Random generator = new Random();
-
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        //BACKGROUND
-        Background myBackground;
+        public SpriteBatch spriteBatch;
 
-        int currSpeed = DEFAULT_SPEED;    //The current speed of the game
-        int speedIncrease = 1;  //How fast the game speeds up
-        int timesSpedUp = 0;
-
-        //PLAYER
-        Player player;
-        //TEXTURES
-        Texture2D lowObstacleTex;
-        Texture2D highObstacleTex;
-
-        Texture2D speedPUpTex;
-        Texture2D extraLifePUpTex;
-        Texture2D jumpPUpTex;
-        Texture2D explosionTex;
-
-        //TIMER
-        int timer = DEFAULT_TIME;        //Starting timer
-        //OBSTACLES
-        List<Obstacle> obstacles = new List<Obstacle>();
-        //POWER-UPS
-        List<PowerUp> powerUps = new List<PowerUp>();
-
-        //COLLECTIBLES
-        List<Collectible> collectibles = new List<Collectible>();
-
-        List<Texture2D> collectibleTextures = new List<Texture2D>();
-
-
+        StartScreen startScreen;
+        GamePlayScreen gamePlayScreen;
+        Screen currentScreen;
+        
 
         public Game1()
         {
@@ -73,9 +35,12 @@ namespace Burrito
             Content.RootDirectory = "Content";
         }
 
-        public void StartNewGame()
+        public void StartGame()
         {
+            gamePlayScreen = new GamePlayScreen(this);
+            currentScreen = Screen.GamePlayScreen;
 
+            startScreen = null;
         }
 
         // Allows the game to perform any initialization it needs to before starting to run.
@@ -95,55 +60,10 @@ namespace Burrito
         // all of your content.
         protected override void LoadContent()
         {
-            lowObstacleTex = Content.Load<Texture2D>(@"Textures\lowobstacle");
-            highObstacleTex = Content.Load<Texture2D>(@"Textures\highobstacle");
-
-            speedPUpTex = Content.Load<Texture2D>(@"Textures\speedpup");
-            extraLifePUpTex = Content.Load<Texture2D>(@"Textures\1uppup");
-            jumpPUpTex = Content.Load<Texture2D>(@"Textures\jumppup");
-            explosionTex = Content.Load<Texture2D>(@"Textures\explosions");
-
-            Texture2D lettuceCollect = Content.Load<Texture2D>(@"Textures\lettucecollect");
-            collectibleTextures.Add(lettuceCollect);
-            Texture2D riceCollect = Content.Load<Texture2D>(@"Textures\ricecollect");
-            collectibleTextures.Add(riceCollect);
-            Texture2D tomatoCollect = Content.Load<Texture2D>(@"Textures\tomatocollect");
-            collectibleTextures.Add(tomatoCollect);
-
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            explosion = new AnimatedSprite(Content.Load<Texture2D>(@"Textures\Explosions"),
-                                           0, 0, 64, 64, 16);
-            explosion.X = 0;
-            explosion.Y = 0;
-
-
-            // TODO: use this.Content to load your game content here
-            myBackground = new Background();
-            Texture2D background = Content.Load<Texture2D>(@"Textures\bg1"); //Load Background
-
-            SoundEffect[] sound = new SoundEffect[2];
-            sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
-            sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
-
-            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100, 275), sound);  //Load Player
-
-            hud = new HUD(player.lives);
-            hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
-            hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
-
-            //Load the PowerUps
-            LoadEncounteredObjects(8, 0);
-
-            //Load the obstacles
-
-            LoadObstacles(8, 0);
-            player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");  //Load Game Soundtrack
-
-            MediaPlayer.Play(player.soundtrack);  //Play Soundtrack...
-            MediaPlayer.IsRepeating = true;       //On Repeat
-            myBackground.Load(GraphicsDevice, background);
+            startScreen = new StartScreen(this);
+            currentScreen = Screen.StartScreen;
         }
 
         // UnloadContent will be called once per game and is the place to unload
@@ -160,45 +80,23 @@ namespace Burrito
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // The time since Update was called last.
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //Background Updating based on Time Elapsed (TO DO: Increase Speed over time)
-            UpdateGameSpeed(gameTime);
-
-            //Obstacle Updating
-            foreach (Obstacle x in obstacles)
+            switch (currentScreen)
             {
-                x.Update(elapsed * currSpeed);
+                case Screen.StartScreen:
+                    if (startScreen != null)
+                        startScreen.Update();
+                    break;
+                case Screen.GamePlayScreen:
+                    if (gamePlayScreen != null)
+                        gamePlayScreen.Update(gameTime);
+                    break;
+                case Screen.GameOverScreen:
+                    break;
             }
-
-            myBackground.Update(elapsed * currSpeed); //Update the background based on time elapsed
-
-            //PowerUP updating
-            foreach (PowerUp x in powerUps)
-            {
-                x.Update(elapsed * currSpeed);
-
-            }
-
-            if (player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
-            {
-                currSpeed += 200;
-                hasSpeedBoost = true;
-                player.HasPowerUp = NO_PUP;
-            }
-            if (player.HasPowerUp == SPEED_RESET)
-            {
-                currSpeed -= 200;
-                hasSpeedBoost = false;
-                player.HasPowerUp = NO_PUP;
-            }
-
-            //Update player's sprite
-            player.Update(gameTime);
 
             base.Update(gameTime);
         }
+
 
         // This is called when the game should draw itself.
         // Parameter<gameTime>: Provides a snapshot of timing values.</param>
@@ -207,216 +105,24 @@ namespace Burrito
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            //BACKGROUND DRAWING LOGIC//
-            myBackground.Draw(spriteBatch);
 
-            if ((hud.Score - scoreGained) > POINTS_UNTIL_FATTENING)
+            switch (currentScreen)
             {
-                player.MakeFatter();
-                scoreGained = hud.Score;
-            }
-
-            //ENCOUNTERED OBJECT LOGIC//
-            //Remove obstacles that are offscreen
-            foreach (Obstacle x in obstacles)
-            {
-                if (x.position.X + x.size.X < 0)
-                {
-                    obstacles.Remove(x);
+                case Screen.StartScreen:
+                    if (startScreen != null)
+                        startScreen.Draw(spriteBatch);
                     break;
-                }
-            }
-            //Draw my obstacles
-            foreach (Obstacle x in obstacles)
-                x.Draw(spriteBatch);
-
-
-
-            //Load (6) more obstacles if the amount is running low
-            if (obstacles.Count < 5)
-            {
-                LoadObstacles(6, (int)(obstacles[obstacles.Count - 1].position.X));
-            }
-
-            //POWERUP DRAWING LOGIC//
-            foreach (PowerUp x in powerUps)
-            {
-                if (x.position.X + x.size.X < 0)
-                {
-                    powerUps.Remove(x);
+                case Screen.GamePlayScreen:
+                    if (gamePlayScreen != null)
+                        gamePlayScreen.Draw(spriteBatch);
                     break;
-                }
-            }
-            foreach (PowerUp x in powerUps)
-                x.Draw(spriteBatch);
-
-            foreach (Collectible x in collectibles)
-                x.Draw(spriteBatch);
-
-            //Load (6) more obstacles if the amount is running low
-            if (powerUps.Count < 5)
-            {
-                LoadEncounteredObjects(3, (int)(powerUps[powerUps.Count - 1].position.X));
-            }
-
-            //PLAYER DRAWING LOGIC//
-            //PowerUp section
-            foreach (PowerUp x in powerUps)
-            {
-                if (x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
-                {
-                    player.HasPowerUp = x.getPowerUp();
-
-                    if (x.getPowerUp() == EXTRA_LIFE_PUP && player.lives < MAX_LIVES)
-                        hud.Lives = player.lives;
-
-                    powerUps.Remove(x);
-                    hud.Score += 20;
+                case Screen.GameOverScreen:
                     break;
-                }
             }
-
-            //Obstacle Section
-            foreach (Obstacle x in obstacles)
-            {
-                //SLIDING
-                if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
-                {
-                    if (player.lives > 0)
-                    {
-                        player.lives--;
-                        hud.Lives = player.lives;
-                    }
-                    drawExplosion();
-                    break;
-                }
-                //NOT SLIDING
-                else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
-                {
-                    if (player.lives > 0)
-                    {
-                        player.lives--;
-                        hud.Lives = player.lives;
-                    }
-                    drawExplosion();
-                    break;
-                }
-                else
-                    player.Draw(spriteBatch);
-            }
-
-            hud.Draw(spriteBatch);
-
-            //Don't call anything after this line
+            
             spriteBatch.End();
             base.Draw(gameTime);
         }
-
-        //Makes the game move faster over time
-        protected void UpdateGameSpeed(GameTime gametime)
-        {
-            float elapsed = (float)gametime.ElapsedGameTime.TotalMilliseconds;
-            timer -= (int)elapsed;
-            if (timer <= 0)
-            {
-                hud.Score += scorePerSecond;
-                timer = DEFAULT_TIME;         //Every DEFAULT_TIME
-                currSpeed += speedIncrease;  //Increase currSpeed
-                ++timesSpedUp;
-            }
-            if (timesSpedUp > 20)
-            {
-                scorePerSecond += 2;
-                timesSpedUp = 0;
-            }
-        }
-
-        //Loads a given number of Obstacles
-        protected void LoadObstacles(int numObstacles, int lastPosition)
-        {
-            Random generator = new Random();
-            for (int i = 0; i < numObstacles; ++i)
-            {
-                int rand = generator.Next(0, 50);
-                //Spawn on Floor
-                if (rand < 30)
-                    obstacles.Add(new Obstacle(lowObstacleTex, new Vector2(lastPosition + 1000, 350)));
-                //Spawn in Air
-                else
-                    obstacles.Add(new Obstacle(highObstacleTex, new Vector2(lastPosition + 1000, -50)));
-
-                //Increment the spawn location
-                lastPosition += 1000;
-            }
-        }
-
-
-        //Loads a given number of Power Ups
-        protected void LoadEncounteredObjects(int numEncounteredObjects, int lastPosition)
-        {
-            Random generator = new Random();
-            for (int i = 0; i < numEncounteredObjects; i++)
-            {
-                int rand = generator.Next(0, 5);
-
-                if (rand < 25)
-                {
-                    if (rand < 5)
-                    {
-                        powerUps.Add(new ExtraLifePowerUp(extraLifePUpTex,
-                                                          new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
-                    }
-                    else if (rand < 15)
-                    {
-                        powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                           new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
-                    }
-
-                    else if (rand < 25)
-                    {
-                        powerUps.Add(new JumpPowerUp(jumpPUpTex,
-                                           new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
-                    }
-
-                }
-                else
-                {
-                    rand = generator.Next(0, 2);
-
-                    collectibles.Add(new Collectible(collectibleTextures[rand],
-                                     new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30)), 20));
-
-                }
-                //else if (rand < 40)
-                //{                
-                //    //TODO Textures for new powerups
-                //        powerUps.Add(new JumpPowerUp(speedPUpTex,
-                //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
-                //    }
-                //    else
-                //    {
-                //        //TODO Textures for new powerups
-                //        powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
-                //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
-                lastPosition += 2000;
-            }
-        }
-
-        public void drawExplosion()
-        {
-            int k = -10;
-            for (int i = -10; i <= 140; i += 20)
-            {
-                explosion.Draw(spriteBatch, (int)player.position.X + k + 75, (int)player.position.Y + i, false);
-
-                if (k == -10)
-                    k = 20;
-                else
-                    k = -10;
-            }
-        }
-
     }
-
 }
 

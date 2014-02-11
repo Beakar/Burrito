@@ -113,6 +113,7 @@
     <Compile Include="EncounteredObject.cs" />
     <Compile Include="Explosion.cs" />
     <Compile Include="ExtraLifePowerUp.cs" />
+    <Compile Include="GamePlayScreen.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="JumpPowerUp.cs" />
     <Compile Include="Obstacle.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="SpeedPowerUp.cs" />
+    <Compile Include="StartScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
