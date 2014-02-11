@@ -20,6 +20,7 @@ namespace Burrito
         public const int SPEED_RESET = -5;
         public int lives = 5;
         public int startTime = 0;
+        public int obesity = 0;
         bool hasSpeedBoost;
         private Texture2D player;
         public Vector2 position;
@@ -49,6 +50,8 @@ namespace Burrito
                 if (_isSliding)
                 {
                     currentFrame.X = sheetSize.X - 1;
+                    if (obesity > 1)
+                        currentFrame.Y = sheetSize.Y - 1;
                     if (position.Y <= 290)
                         position.Y += 25;
                 }
@@ -87,6 +90,7 @@ namespace Burrito
             frameSize = new Point(200, 200);
             currentFrame = new Point(0, 0);
             sheetSize = new Point(5, 4);
+            lives = 5;
             hasPowerUp = NO_PUP;
         }
 
@@ -102,14 +106,25 @@ namespace Burrito
                 //Moves the Source Rectangle
 
                 //Cycle through the sprite sheet
-                ++currentFrame.X;
-                if (currentFrame.X >= sheetSize.X - 2)
+                if (obesity < 2)
                 {
-                    currentFrame.X = 0;
-                    //++currentFrame.Y;
-                    if (currentFrame.Y >= sheetSize.Y)
+                    ++currentFrame.X;
+                    if (currentFrame.X >= sheetSize.X - 2)
                     {
-                        currentFrame.Y = 0;
+                        currentFrame.X = 0;
+                    }
+                }
+                else
+                {
+                    ++currentFrame.X;
+                    if (currentFrame.X >= sheetSize.X - 1)
+                    {
+                        currentFrame.X = 0;
+                        ++currentFrame.Y;
+                        if (currentFrame.Y >= sheetSize.Y)
+                        {
+                            currentFrame.Y = 2;
+                        }
                     }
                 }
             }
@@ -172,12 +187,12 @@ namespace Burrito
                         hasPowerUp = NO_PUP;
                         break;
                     case X_LIFE_PUP:
-                        //TODO add extra life logic when lives exist
+                        ++lives;
+                        hasPowerUp = NO_PUP;
                         break;
                     default:
                         break;
-                }
-                
+                }  
             }
 
             if (hasSpeedBoost && (startTime + 4) < (int)gametime.TotalGameTime.TotalSeconds)
@@ -195,6 +210,15 @@ namespace Burrito
                              position,
                              new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y),
                              Color.White);
+        }
+
+        public void MakeFatter()
+        {
+            if (obesity < 2)
+            {
+                obesity++;
+                currentFrame.Y++;
+            }
         }
     }
 }

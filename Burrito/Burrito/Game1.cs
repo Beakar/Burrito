@@ -20,13 +20,15 @@ namespace Burrito
         public static int SPEED_PUP = 0;
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
-        public static int MAX_LIVES = 3;
+        public static int MAX_LIVES = 5;
         public static int DEFAULT_TIME = 500;  //Increase speed every 500ms
+        public static int POINTS_UNTIL_FATTENING = 500;  //how many points until your player gets increased weight
 
         public bool hasSpeedBoost;
 
         HUD hud;
         int scorePerSecond = 1;
+        int scoreGained = 0;
 
         AnimatedSprite explosion;
         Random generator = new Random();
@@ -208,7 +210,11 @@ namespace Burrito
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
 
-            hud.Draw(spriteBatch);
+            if ((hud.Score - scoreGained) > POINTS_UNTIL_FATTENING)
+            {
+                player.MakeFatter();
+                scoreGained = hud.Score;
+            }
 
             //ENCOUNTERED OBJECT LOGIC//
             //Remove obstacles that are offscreen
@@ -261,12 +267,11 @@ namespace Burrito
                 {
                     player.HasPowerUp = x.getPowerUp();
 
-                    if (x.getPowerUp() == EXTRA_LIFE_PUP && lives < MAX_LIVES)
-                        lives++;
+                    if (x.getPowerUp() == EXTRA_LIFE_PUP && player.lives < MAX_LIVES)
+                        hud.Lives = player.lives;
 
                     powerUps.Remove(x);
                     hud.Score += 20;
-
                     break;
                 }
             }
@@ -300,10 +305,7 @@ namespace Burrito
                     player.Draw(spriteBatch);
             }
 
-            //if (obstacles.Count == 0)
-            //{
-            //    player.Draw(spriteBatch);
-            //}
+            hud.Draw(spriteBatch);
 
             //Don't call anything after this line
             spriteBatch.End();
@@ -355,7 +357,7 @@ namespace Burrito
             Random generator = new Random();
             for (int i = 0; i < numEncounteredObjects; i++)
             {
-                int rand = generator.Next(0, 100);
+                int rand = generator.Next(0, 5);
 
                 if (rand < 25)
                 {
