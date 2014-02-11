@@ -18,19 +18,25 @@ namespace Burrito
         public static int SPEED_RESET = -5;
         public static int NO_PUP = -1;
         public static int SPEED_PUP = 0;
-
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
+
+        public static int MAX_LIVES = 3;
+        int lives;
+
         public bool hasSpeedBoost;
 
         HUD hud;
 
+        AnimatedSprite explosion;
+        Random generator = new Random();
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         //BACKGROUND
         Background myBackground;
-        int currSpeed = 300;    //The current speed of the game
+
+        int currSpeed = DEFAULT_SPEED;    //The current speed of the game
         int speedIncrease = 2;  //How fast the game speeds up
         //PLAYER
         Player player;
@@ -41,6 +47,8 @@ namespace Burrito
         Texture2D speedPUpTex;
         Texture2D extraLifePUpTex;
         Texture2D jumpPUpTex;
+        Texture2D explosionTex;
+
         //TIMER
         int defaultTime = 400;  //Increase speed every 400ms
         int timer = 400;        //Starting timer
@@ -84,13 +92,14 @@ namespace Burrito
         // all of your content.
         protected override void LoadContent()
         {
-
+            lives = 5;
             lowObstacleTex = Content.Load<Texture2D>(@"Textures\lowobstacle");
             highObstacleTex = Content.Load<Texture2D>(@"Textures\highobstacle");
 
             speedPUpTex = Content.Load<Texture2D>(@"Textures\speedpup");
             extraLifePUpTex = Content.Load<Texture2D>(@"Textures\1uppup");
             jumpPUpTex = Content.Load<Texture2D>(@"Textures\jumppup");
+            explosionTex = Content.Load<Texture2D>(@"Textures\explosions");
 
             Texture2D lettuceCollect = Content.Load<Texture2D>(@"Textures\lettucecollect");
             collectibleTextures.Add(lettuceCollect);
@@ -102,6 +111,12 @@ namespace Burrito
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            explosion = new AnimatedSprite(Content.Load<Texture2D>(@"Textures\Explosions"),
+                                           0, 0, 64, 64, 16);
+            explosion.X = 0;
+            explosion.Y = 0;
+
+
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\bg1"); //Load Background
@@ -111,7 +126,7 @@ namespace Burrito
             hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
 
             //Load the PowerUps
-            LoadEncounteredObjects(5, 0);
+            LoadEncounteredObjects(8, 0);
 
             //Load the obstacles
             LoadObstacles(8, 0);
@@ -247,6 +262,10 @@ namespace Burrito
                 if (x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
                     player.HasPowerUp = x.getPowerUp();
+
+                    if (x.getPowerUp() == EXTRA_LIFE_PUP && lives < MAX_LIVES)
+                        lives++;
+
                     powerUps.Remove(x);
                     break;
                 }
@@ -258,11 +277,23 @@ namespace Burrito
                 //SLIDING
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
                 {
+                    if (lives > 0)
+                    {
+                        lives--;
+                        hud.Lives = lives;
+                    }
+                    drawExplosion();
                     break;
                 }
                 //NOT SLIDING
                 else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
+                    if (lives > 0)
+                    {
+                        lives--;
+                        hud.Lives = lives;
+                    }
+                    drawExplosion();
                     break;
                 }
                 else
@@ -345,7 +376,7 @@ namespace Burrito
 
                     collectibles.Add(new Collectible(collectibleTextures[rand],
                                      new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30)), 20));
-                    
+
                 }
                 //else if (rand < 40)
                 //{                
@@ -361,6 +392,20 @@ namespace Burrito
             }
 
             lastPosition += 2000;
+        }
+
+        public void drawExplosion()
+        {
+            int k = -10;
+            for (int i = -10; i <= 140; i += 20)
+            {
+                explosion.Draw(spriteBatch, (int)player.position.X + k + 75, (int)player.position.Y + i, false);
+
+                if (k == -10)
+                    k = 20;
+                else
+                    k = -10;
+            }
         }
 
     }

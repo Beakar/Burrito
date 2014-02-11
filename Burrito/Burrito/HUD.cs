@@ -17,6 +17,8 @@ namespace Burrito
 
         public int Score { get; set; }
 
+        public int Lives { get; set; }
+
         public HUD()
         {
         }
@@ -38,6 +40,12 @@ namespace Burrito
                 Font,
                 "King Burrito",
                 new Vector2(450, 10),
+                Color.White);
+
+            spriteBatch.DrawString(
+                Font,
+                "Lives: " + Lives.ToString(),
+                new Vector2(10, 10),
                 Color.White);
         }
     }
