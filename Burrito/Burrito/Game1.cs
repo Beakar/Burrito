@@ -26,6 +26,7 @@ namespace Burrito
 
         StartScreen startScreen;
         GamePlayScreen gamePlayScreen;
+        GameOverScreen gameOverScreen;
         Screen currentScreen;
         
 
@@ -39,8 +40,15 @@ namespace Burrito
         {
             gamePlayScreen = new GamePlayScreen(this);
             currentScreen = Screen.GamePlayScreen;
-
             startScreen = null;
+            gameOverScreen = null;
+        }
+
+        public void EndGame()
+        {
+            gameOverScreen = new GameOverScreen(this);
+            currentScreen = Screen.GameOverScreen;
+            gamePlayScreen = null;
         }
 
         // Allows the game to perform any initialization it needs to before starting to run.
@@ -91,6 +99,8 @@ namespace Burrito
                         gamePlayScreen.Update(gameTime);
                     break;
                 case Screen.GameOverScreen:
+                    if (gameOverScreen != null)
+                        gameOverScreen.Update();
                     break;
             }
 
@@ -117,6 +127,8 @@ namespace Burrito
                         gamePlayScreen.Draw(spriteBatch);
                     break;
                 case Screen.GameOverScreen:
+                    if (gameOverScreen != null)
+                        gameOverScreen.Draw(spriteBatch);
                     break;
             }
             

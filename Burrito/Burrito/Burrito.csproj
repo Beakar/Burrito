@@ -113,6 +113,7 @@
     <Compile Include="EncounteredObject.cs" />
     <Compile Include="Explosion.cs" />
     <Compile Include="ExtraLifePowerUp.cs" />
+    <Compile Include="GameOverScreen.cs" />
     <Compile Include="GamePlayScreen.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="JumpPowerUp.cs" />

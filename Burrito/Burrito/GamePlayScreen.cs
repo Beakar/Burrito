@@ -24,7 +24,7 @@ namespace Burrito
         public static int EXTRA_LIFE_PUP = 2;
         public static int MAX_LIVES = 5;
         public static int DEFAULT_TIME = 500;  //Increase speed every 500ms
-        public static int POINTS_UNTIL_FATTENING = 500;  //how many points until your player gets increased weight
+        public static int POINTS_UNTIL_FATTENING = 1000;  //how many points until your player gets increased weight
 
         public bool hasSpeedBoost;
 
@@ -42,6 +42,9 @@ namespace Burrito
         int timesSpedUp = 0;
         //PLAYER
         Player player;
+        bool lostLife = false;
+        bool canLoseLife = true;
+        int gracePeriod = 300;
         //TEXTURES
         Texture2D lowObstacleTex;
         Texture2D highObstacleTex;
@@ -111,19 +114,31 @@ namespace Burrito
             myBackground.Load(game.GraphicsDevice, background);
         }
 
+        //UPDATE//
         public void Update(GameTime gameTime)
         {
             // The time since Update was called last.
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            //Background Updating based on Time Elapsed (TO DO: Increase Speed over time)
             UpdateGameSpeed(gameTime);
 
             //Obstacle Updating
             foreach (Obstacle x in obstacles)
             {
                 x.Update(elapsed * currSpeed);
+                //SLIDING
+                if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80) && canLoseLife)
+                {
+                    lostLife = true;
+                }
+                //NO SLIDING
+                else if ((!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160)) && canLoseLife)
+                {
+                    lostLife = true;
+                }
             }
+
+            Death(gameTime);
 
             myBackground.Update(elapsed * currSpeed); //Update the background based on time elapsed
 
@@ -151,11 +166,12 @@ namespace Burrito
             player.Update(gameTime);
         }
 
+        //DRAW//
         public void Draw(SpriteBatch spriteBatch)
         {
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
-
+            hud.Draw(spriteBatch);
             if ((hud.Score - scoreGained) > POINTS_UNTIL_FATTENING)
             {
                 player.MakeFatter();
@@ -175,7 +191,6 @@ namespace Burrito
             //Draw my obstacles
             foreach (Obstacle x in obstacles)
                 x.Draw(spriteBatch);
-
 
 
             //Load (6) more obstacles if the amount is running low
@@ -228,32 +243,41 @@ namespace Burrito
                 //SLIDING
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
                 {
-                    if (player.lives > 0)
-                    {
-                        player.lives--;
-                        hud.Lives = player.lives;
-                    }
                     drawExplosion();
                     break;
                 }
                 //NOT SLIDING
                 else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
-                    if (player.lives > 0)
-                    {
-                        player.lives--;
-                        hud.Lives = player.lives;
-                    }
                     drawExplosion();
                     break;
                 }
                 else
                     player.Draw(spriteBatch);
             }
-
-            hud.Draw(spriteBatch);
         }
 
+        protected void Death(GameTime gameTime)
+        {
+            if (lostLife && canLoseLife)
+            {
+                player.lives--;
+                hud.Lives = player.lives;
+            }
+            
+            if (player.lives == 0)
+                game.EndGame();
+
+            canLoseLife = false;
+            float deathElapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            gracePeriod -= (int)deathElapsed;
+            if (gracePeriod <= 0)
+            {
+                lostLife = false;
+                canLoseLife = true;
+                gracePeriod = 300;
+            }
+        }
 
         //Makes the game move faster over time
         protected void UpdateGameSpeed(GameTime gametime)
@@ -269,7 +293,7 @@ namespace Burrito
             }
             if (timesSpedUp > 20)
             {
-                scorePerSecond += 2;
+                scorePerSecond += 1;
                 timesSpedUp = 0;
             }
         }
@@ -346,6 +370,11 @@ namespace Burrito
                 else
                     k = -10;
             }
+        }
+
+        public int NumLives()
+        {
+            return player.lives;
         }
     }
 }
