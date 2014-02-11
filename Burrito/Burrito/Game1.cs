@@ -35,7 +35,7 @@ namespace Burrito
         //POWER-UPS
         List<PowerUp> powerUps = new List<PowerUp>();
         //SCORE
-        int iPlayerScore = 0;
+        HUD hud;
         
 
         public Game1()
@@ -51,7 +51,7 @@ namespace Burrito
 
         // Allows the game to perform any initialization it needs to before starting to run.
         // This is where it can query for any required services and load any non-graphic
-        // related content.  Calling base.Initialize will enumerate through any components
+        // related content. Calling base.Initialize will enumerate through any components
         // and initialize them as well.
         protected override void Initialize()
         {
@@ -75,15 +75,12 @@ namespace Burrito
 
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
+            hud = new HUD();
+            hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
-           //powerups
 
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(2400, 250)));
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(3900, 250)));
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(5400, 250)));
+            //Load the PowerUps
+            LoadPowerups(5, 0);
 
             //Load the obstacles
             LoadObstacles(8, 0);
@@ -91,8 +88,10 @@ namespace Burrito
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
             sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
+
             player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100, 275), sound);  //Load Player
             player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");  //Load Game Soundtrack
+
             MediaPlayer.Play(player.soundtrack);  //Play Soundtrack...
             MediaPlayer.IsRepeating = true;       //On Repeat
             myBackground.Load(GraphicsDevice, background);
@@ -101,9 +100,7 @@ namespace Burrito
         // UnloadContent will be called once per game and is the place to unload
         // all content.
         protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
+        {}
 
         // Allows the game to run logic such as updating the world,
         // checking for collisions, gathering input, and playing audio.
@@ -147,12 +144,11 @@ namespace Burrito
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            //Draw Stuff below this line
-
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
 
             //ENCOUNTERED OBJECT LOGIC//
+            //Remove obstacles that are offscreen
             foreach (Obstacle x in obstacles)
             {
                 if (x.position.X + x.size.X < 0)
@@ -160,9 +156,12 @@ namespace Burrito
                     obstacles.Remove(x);
                     break;
                 }
-                x.Draw(spriteBatch);
             }
+            //Draw my obstacles
+            foreach (Obstacle x in obstacles)
+                x.Draw(spriteBatch);
 
+            //Load (6) more obstacles if the amount is running low
             if (obstacles.Count < 5)
             {
                 LoadObstacles(6, (int)(obstacles[obstacles.Count-1].position.X));
@@ -176,41 +175,53 @@ namespace Burrito
                     powerUps.Remove(x);
                     break;
                 }
-                x.Draw(spriteBatch);
             }
+            foreach (PowerUp x in powerUps)
+                x.Draw(spriteBatch);
 
+            //Load (6) more obstacles if the amount is running low
+            if (powerUps.Count < 5)
+            {
+                LoadPowerups(3, (int)(powerUps[powerUps.Count - 1].position.X));
+            }
 
             //PLAYER DRAWING LOGIC//
             //PowerUp section
             foreach (PowerUp x in powerUps)
             {
                 if (x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
-                  {
-                     player.HasPowerUp = x.getPowerUp();
-                     powerUps.Remove(x);
-                     break;
-                  }
+                {
+                    player.HasPowerUp = x.getPowerUp();
+                    hud.Score += 50;
+                    powerUps.Remove(x);
+                    break;
+                }
             }
 
             //Obstacle Section
             foreach (Obstacle x in obstacles)
             {
+                //SLIDING
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
                 {
                     break;
                 }
+                //NOT SLIDING
                 else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
                     break;
                 }
                 else
                     player.Draw(spriteBatch);
+                    
             }
             if (obstacles.Count == 0)
             {
                 player.Draw(spriteBatch);
             }
-            
+            //Update HUD
+            hud.Draw(spriteBatch);
+
             //Don't call anything after this line
             spriteBatch.End();
             base.Draw(gameTime);
@@ -221,10 +232,10 @@ namespace Burrito
         {
             float elapsed = (float)gametime.ElapsedGameTime.TotalMilliseconds;
             timer -= (int)elapsed;
-
             if (timer <= 0)
             {
-                timer = defaultTime;         //Every half second
+                hud.Score += 5;
+                timer = defaultTime;         //Every defaultTime
                 currSpeed += speedIncrease;  //Increase currSpeed
             }
         }
@@ -238,42 +249,42 @@ namespace Burrito
                 int rand = generator.Next(0, 50);
                 //Spawn on Floor
                 if (rand < 30)
-                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1300, 300)));
+                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1000, 300)));
                 //Spawn in Air
                 else
-                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1300, 100)));
+                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1000, 100)));
 
                 //Increment the spawn location
-                lastPosition += 1300;
+                lastPosition += 1000;
             }
         }
 
 
-        //LOADS THE POWERUPS
+        //Loads a given number of Power Ups
         protected void LoadPowerups(int numPowerUps, int lastPosition)
         {
             Random generator = new Random();
             for (int i = 0; i < numPowerUps; i++)
             {
                 int rand = generator.Next(0, 60);
-                if (rand < 20)
+                if (rand < 70)
                 {
                     powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1500, 250)));
+                                 new Vector2(lastPosition + 500, 300)));
                 }
                 else if (rand < 40)
                 {
                     //TODO Textures for new powerups
                     powerUps.Add(new JumpPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1500, 250)));
+                                 new Vector2(lastPosition + 500, 300)));
                 }
                 else
                 {
                     //TODO Textures for new powerups
                     powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1500, 250)));
+                                 new Vector2(lastPosition + 500, 300)));
                 }
-                lastPosition += 1500;
+                lastPosition += 500;
             }
        }
     }
