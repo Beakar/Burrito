@@ -157,7 +157,7 @@ namespace Burrito
                     case 0:
                         if (startTime != 0)
                         {
-                            startTime += 400;
+                            startTime += 4;
                             hasPowerUp = NO_PUP;
                             break;
                         }

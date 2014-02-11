@@ -14,7 +14,15 @@ namespace Burrito
     // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        public static int DEFAULT_SPEED = 300;
+        public static int SPEED_RESET = -5;
+        public static int NO_PUP = -1;
         public static int SPEED_PUP = 0;
+
+        public static int JUMP_PUP = 1;
+        public static int EXTRA_LIFE_PUP = 2;
+        public bool hasSpeedBoost;
+
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -125,7 +133,24 @@ namespace Burrito
             foreach (PowerUp x in powerUps)
             {
                 x.Update(elapsed * currSpeed);
+
             }
+
+             if(player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
+            {
+                currSpeed += 200;
+                hasSpeedBoost = true;
+                player.HasPowerUp = NO_PUP;
+            }
+            if (player.HasPowerUp == SPEED_RESET)
+            {
+                currSpeed -= 200;
+                hasSpeedBoost = false;
+                player.HasPowerUp = NO_PUP;
+            }
+
+
+
 
             //Update player's sprite
             player.Update(gameTime);
@@ -259,25 +284,26 @@ namespace Burrito
             for (int i = 0; i < numPowerUps; i++)
             {
                 int rand = generator.Next(0, 60);
-                if (rand < 70)
+                if (rand < 20)
                 {
                     powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1700, 300)));
+                                       new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
                 }
-                else if (rand < 40)
-                {
-                    //TODO Textures for new powerups
-                    powerUps.Add(new JumpPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1700, 300)));
-                }
-                else
-                {
-                    //TODO Textures for new powerups
-                    powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1700, 300)));
-                }
-                lastPosition += 1700;
+                //else if (rand < 40)
+                //{                
+                //    //TODO Textures for new powerups
+                //        powerUps.Add(new JumpPowerUp(speedPUpTex,
+                //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                //    }
+                //    else
+                //    {
+                //        //TODO Textures for new powerups
+                //        powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
+                //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+ 	                }
+
+                lastPosition += 2000;
             }
        }
     }
-}
+
