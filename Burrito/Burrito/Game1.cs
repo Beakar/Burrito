@@ -14,19 +14,19 @@ namespace Burrito
     // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public static int DEFAULT_SPEED = 300;
+        public static int DEFAULT_SPEED = 475;
         public static int SPEED_RESET = -5;
         public static int NO_PUP = -1;
         public static int SPEED_PUP = 0;
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
-
         public static int MAX_LIVES = 3;
-        int lives;
+        public static int DEFAULT_TIME = 500;  //Increase speed every 500ms
 
         public bool hasSpeedBoost;
 
         HUD hud;
+        int scorePerSecond = 1;
 
         AnimatedSprite explosion;
         Random generator = new Random();
@@ -37,7 +37,9 @@ namespace Burrito
         Background myBackground;
 
         int currSpeed = DEFAULT_SPEED;    //The current speed of the game
-        int speedIncrease = 2;  //How fast the game speeds up
+        int speedIncrease = 1;  //How fast the game speeds up
+        int timesSpedUp = 0;
+
         //PLAYER
         Player player;
         //TEXTURES
@@ -50,8 +52,7 @@ namespace Burrito
         Texture2D explosionTex;
 
         //TIMER
-        int defaultTime = 400;  //Increase speed every 400ms
-        int timer = 400;        //Starting timer
+        int timer = DEFAULT_TIME;        //Starting timer
         //OBSTACLES
         List<Obstacle> obstacles = new List<Obstacle>();
         //POWER-UPS
@@ -92,7 +93,6 @@ namespace Burrito
         // all of your content.
         protected override void LoadContent()
         {
-            lives = 5;
             lowObstacleTex = Content.Load<Texture2D>(@"Textures\lowobstacle");
             highObstacleTex = Content.Load<Texture2D>(@"Textures\highobstacle");
 
@@ -121,7 +121,13 @@ namespace Burrito
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\bg1"); //Load Background
 
-            hud = new HUD(lives);
+            SoundEffect[] sound = new SoundEffect[2];
+            sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
+            sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
+
+            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100, 275), sound);  //Load Player
+
+            hud = new HUD(player.lives);
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
             hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
 
@@ -129,13 +135,8 @@ namespace Burrito
             LoadEncounteredObjects(8, 0);
 
             //Load the obstacles
+
             LoadObstacles(8, 0);
-
-            SoundEffect[] sound = new SoundEffect[2];
-            sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
-            sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
-
-            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100, 275), sound);  //Load Player
             player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");  //Load Game Soundtrack
 
             MediaPlayer.Play(player.soundtrack);  //Play Soundtrack...
@@ -276,10 +277,10 @@ namespace Burrito
                 //SLIDING
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
                 {
-                    if (lives > 0)
+                    if (player.lives > 0)
                     {
-                        lives--;
-                        hud.Lives = lives;
+                        player.lives--;
+                        hud.Lives = player.lives;
                     }
                     drawExplosion();
                     break;
@@ -287,22 +288,22 @@ namespace Burrito
                 //NOT SLIDING
                 else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
-                    if (lives > 0)
+                    if (player.lives > 0)
                     {
-                        lives--;
-                        hud.Lives = lives;
+                        player.lives--;
+                        hud.Lives = player.lives;
                     }
                     drawExplosion();
                     break;
                 }
                 else
                     player.Draw(spriteBatch);
+            }
 
-            }
-            if (obstacles.Count == 0)
-            {
-                player.Draw(spriteBatch);
-            }
+            //if (obstacles.Count == 0)
+            //{
+            //    player.Draw(spriteBatch);
+            //}
 
             //Don't call anything after this line
             spriteBatch.End();
@@ -316,9 +317,15 @@ namespace Burrito
             timer -= (int)elapsed;
             if (timer <= 0)
             {
-                hud.Score += 2;
-                timer = defaultTime;         //Every defaultTime
+                hud.Score += scorePerSecond;
+                timer = DEFAULT_TIME;         //Every DEFAULT_TIME
                 currSpeed += speedIncrease;  //Increase currSpeed
+                ++timesSpedUp;
+            }
+            if (timesSpedUp > 20)
+            {
+                scorePerSecond += 2;
+                timesSpedUp = 0;
             }
         }
 

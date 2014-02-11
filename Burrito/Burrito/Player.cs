@@ -18,7 +18,8 @@ namespace Burrito
         private const int JUMP_PUP = 1;
         private const int X_LIFE_PUP = 2;
         public const int SPEED_RESET = -5;
-        public int startTime;
+        public int lives = 5;
+        public int startTime = 0;
         bool hasSpeedBoost;
         private Texture2D player;
         public Vector2 position;
