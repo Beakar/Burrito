@@ -8,29 +8,28 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Burrito
 {
-    public class PowerUp : EncounteredObject
+    public abstract class PowerUp: EncounteredObject
     {
-        public static int POWER_UP_SIZE = 30;
-        protected Rectangle rectHitBox;
+        //An Powerup is an EncounteredObject
+        //An Powerup doesn't need anything extra of its own *yet*
 
-        public PowerUp(int x, int y, Texture2D texture) : base(texture, new Vector2((float)x, (float)y))
+        public bool beenHit;
+        public PowerUp(Texture2D newTexture, Vector2 newPos)
+            : base(newTexture, newPos)
         {
-            size = new Vector2(POWER_UP_SIZE, POWER_UP_SIZE);
-            rectHitBox = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+           // beenHit = false;
         }
 
-        //general draw method for powerups, pass in a texture in the subclass
-        public void Draw(SpriteBatch spritebatch)
+        //only draw before it's been hit (make sure to change been hit to false when it is hit)
+        public new void Draw(SpriteBatch sb)
         {
-            spritebatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y),
-                Color.White);
+           
+                base.Draw(sb);
+          
         }
 
-        public Rectangle hitBox
-        {
-            get { return rectHitBox; }
-        }
 
+        public abstract int getPowerUp();//abstract method for all powerups to return their constant
 
 
     }

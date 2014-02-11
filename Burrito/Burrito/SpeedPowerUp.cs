@@ -10,14 +10,15 @@ namespace Burrito
 {
     class SpeedPowerUp: PowerUp
     {
-        Texture2D myTexture;
-        public SpeedPowerUp(int x, int y, Texture2D texture)
-            : base(x, y, texture)
+        public static int SPEED_POWERUP = 0;
+
+        public SpeedPowerUp(Texture2D newTexture, Vector2 newPos)
+            : base(newTexture, newPos)
         { }
         
-        
-        public void Draw(SpriteBatch spriteBatch){
-            base.Draw(spriteBatch);
-        }
+       public override int getPowerUp() //using traditional getter for this, faster than c# ones in this case
+    {
+        return SPEED_POWERUP;
+    }
     }
 }
