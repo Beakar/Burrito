@@ -76,14 +76,14 @@ namespace Burrito
         {
 
             obstacleTex = Content.Load<Texture2D>(@"Textures\angry");
-            speedPUpTex = Content.Load<Texture2D>(@"Textures\jalapeno");
+            speedPUpTex = Content.Load<Texture2D>(@"Textures\speedpup");
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
-            Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
+            Texture2D background = Content.Load<Texture2D>(@"Textures\bg1"); //Load Background
 
             hud = new HUD();
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
