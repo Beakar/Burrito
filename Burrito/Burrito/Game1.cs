@@ -23,6 +23,8 @@ namespace Burrito
         public static int EXTRA_LIFE_PUP = 2;
         public bool hasSpeedBoost;
 
+        HUD hud;
+
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -82,6 +84,10 @@ namespace Burrito
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
+
+            hud = new HUD();
+            hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
+            hud.Back = Content.Load <Texture2D>(@"Textures\scoreback");
 
             //Load the PowerUps
             LoadPowerups(5, 0);
@@ -167,6 +173,8 @@ namespace Burrito
             spriteBatch.Begin();
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
+
+            hud.Draw(spriteBatch);
 
             //ENCOUNTERED OBJECT LOGIC//
             //Remove obstacles that are offscreen
