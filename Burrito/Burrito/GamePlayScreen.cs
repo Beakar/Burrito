@@ -23,8 +23,8 @@ namespace Burrito
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
         public static int MAX_LIVES = 5;
-        public static int DEFAULT_TIME = 500;  //Increase speed every 500ms
-        public static int POINTS_UNTIL_FATTENING = 1000;  //how many points until your player gets increased weight
+        public static int DEFAULT_TIME = 400;  //Increase speed every 500ms
+        public static int POINTS_UNTIL_FATTENING = 600;  //how many points until your player gets increased weight
 
         public bool hasSpeedBoost;
 
@@ -157,7 +157,7 @@ namespace Burrito
             }
             if (player.HasPowerUp == SPEED_RESET)
             {
-                currSpeed -= 200;
+                currSpeed = DEFAULT_SPEED;
                 hasSpeedBoost = false;
                 player.HasPowerUp = NO_PUP;
             }
@@ -171,7 +171,7 @@ namespace Burrito
         {
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
-            hud.Draw(spriteBatch);
+
             if ((hud.Score - scoreGained) > POINTS_UNTIL_FATTENING)
             {
                 player.MakeFatter();
@@ -255,6 +255,7 @@ namespace Burrito
                 else
                     player.Draw(spriteBatch);
             }
+            hud.Draw(spriteBatch);
         }
 
         protected void Death(GameTime gameTime)
@@ -324,7 +325,7 @@ namespace Burrito
             Random generator = new Random();
             for (int i = 0; i < numEncounteredObjects; i++)
             {
-                int rand = generator.Next(0, 5);
+                int rand = generator.Next(0, 100);
 
                 if (rand < 25)
                 {
@@ -354,7 +355,7 @@ namespace Burrito
                                      new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30)), 20));
 
                 }
-                lastPosition += 2000;
+                lastPosition += 1700;
             }
         }
 
