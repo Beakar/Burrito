@@ -77,7 +77,8 @@ namespace Burrito
             myBackground = new Background();
             hud = new HUD();
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
-            Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
+            hud.Back = Content.Load <Texture2D>(@"Textures\scoreback");
+            Texture2D background = Content.Load<Texture2D>(@"Textures\bg3"); //Load Background
 
             //Load the PowerUps
             LoadPowerups(5, 0);
