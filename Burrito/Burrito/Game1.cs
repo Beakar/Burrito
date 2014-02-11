@@ -267,6 +267,8 @@ namespace Burrito
                         lives++;
 
                     powerUps.Remove(x);
+                    hud.Score += 20;
+
                     break;
                 }
             }
