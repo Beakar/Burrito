@@ -191,9 +191,6 @@ namespace Burrito
                 player.HasPowerUp = NO_PUP;
             }
 
-
-
-
             //Update player's sprite
             player.Update(gameTime);
 
@@ -392,9 +389,8 @@ namespace Burrito
                 //        //TODO Textures for new powerups
                 //        powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
                 //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                lastPosition += 2000;
             }
-
-            lastPosition += 2000;
         }
 
         public void drawExplosion()
