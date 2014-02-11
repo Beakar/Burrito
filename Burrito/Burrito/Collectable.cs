@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Burrito
 {
-    class Collectable : EncounteredObject
+    public class Collectible : EncounteredObject
     {
         private int _Worth;
         public int Worth
@@ -20,7 +20,7 @@ namespace Burrito
             set { _Worth = value; }
         }
 
-        public Collectable(Texture2D newTexture, Vector2 newPos, int score)
+        public Collectible(Texture2D newTexture, Vector2 newPos, int score)
             : base(newTexture, newPos)
         {
             _Worth = score;

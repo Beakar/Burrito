@@ -35,8 +35,12 @@ namespace Burrito
         //PLAYER
         Player player;
         //TEXTURES
-        Texture2D obstacleTex;
+        Texture2D lowObstacleTex;
+        Texture2D highObstacleTex;
+
         Texture2D speedPUpTex;
+        Texture2D extraLifePUpTex;
+        Texture2D jumpPUpTex;
         //TIMER
         int defaultTime = 400;  //Increase speed every 400ms
         int timer = 400;        //Starting timer
@@ -44,7 +48,13 @@ namespace Burrito
         List<Obstacle> obstacles = new List<Obstacle>();
         //POWER-UPS
         List<PowerUp> powerUps = new List<PowerUp>();
-        
+
+        //COLLECTIBLES
+        List<Collectible> collectibles = new List<Collectible>();
+
+        List<Texture2D> collectibleTextures = new List<Texture2D>();
+
+
 
         public Game1()
         {
@@ -75,8 +85,19 @@ namespace Burrito
         protected override void LoadContent()
         {
 
-            obstacleTex = Content.Load<Texture2D>(@"Textures\angry");
+            lowObstacleTex = Content.Load<Texture2D>(@"Textures\lowobstacle");
+            highObstacleTex = Content.Load<Texture2D>(@"Textures\highobstacle");
+
             speedPUpTex = Content.Load<Texture2D>(@"Textures\speedpup");
+            extraLifePUpTex = Content.Load<Texture2D>(@"Textures\1uppup");
+            jumpPUpTex = Content.Load<Texture2D>(@"Textures\jumppup");
+
+            Texture2D lettuceCollect = Content.Load<Texture2D>(@"Textures\lettucecollect");
+            collectibleTextures.Add(lettuceCollect);
+            Texture2D riceCollect = Content.Load<Texture2D>(@"Textures\ricecollect");
+            collectibleTextures.Add(riceCollect);
+            Texture2D tomatoCollect = Content.Load<Texture2D>(@"Textures\tomatocollect");
+            collectibleTextures.Add(tomatoCollect);
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -87,10 +108,10 @@ namespace Burrito
 
             hud = new HUD();
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
-            hud.Back = Content.Load <Texture2D>(@"Textures\scoreback");
+            hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
 
             //Load the PowerUps
-            LoadPowerups(5, 0);
+            LoadEncounteredObjects(5, 0);
 
             //Load the obstacles
             LoadObstacles(8, 0);
@@ -110,7 +131,7 @@ namespace Burrito
         // UnloadContent will be called once per game and is the place to unload
         // all content.
         protected override void UnloadContent()
-        {}
+        { }
 
         // Allows the game to run logic such as updating the world,
         // checking for collisions, gathering input, and playing audio.
@@ -142,7 +163,7 @@ namespace Burrito
 
             }
 
-             if(player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
+            if (player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
             {
                 currSpeed += 200;
                 hasSpeedBoost = true;
@@ -190,10 +211,12 @@ namespace Burrito
             foreach (Obstacle x in obstacles)
                 x.Draw(spriteBatch);
 
+
+
             //Load (6) more obstacles if the amount is running low
             if (obstacles.Count < 5)
             {
-                LoadObstacles(6, (int)(obstacles[obstacles.Count-1].position.X));
+                LoadObstacles(6, (int)(obstacles[obstacles.Count - 1].position.X));
             }
 
             //POWERUP DRAWING LOGIC//
@@ -208,10 +231,13 @@ namespace Burrito
             foreach (PowerUp x in powerUps)
                 x.Draw(spriteBatch);
 
+            foreach (Collectible x in collectibles)
+                x.Draw(spriteBatch);
+
             //Load (6) more obstacles if the amount is running low
             if (powerUps.Count < 5)
             {
-                LoadPowerups(3, (int)(powerUps[powerUps.Count - 1].position.X));
+                LoadEncounteredObjects(3, (int)(powerUps[powerUps.Count - 1].position.X));
             }
 
             //PLAYER DRAWING LOGIC//
@@ -241,7 +267,7 @@ namespace Burrito
                 }
                 else
                     player.Draw(spriteBatch);
-                    
+
             }
             if (obstacles.Count == 0)
             {
@@ -274,10 +300,10 @@ namespace Burrito
                 int rand = generator.Next(0, 50);
                 //Spawn on Floor
                 if (rand < 30)
-                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1000, 300)));
+                    obstacles.Add(new Obstacle(lowObstacleTex, new Vector2(lastPosition + 1000, 350)));
                 //Spawn in Air
                 else
-                    obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1000, 100)));
+                    obstacles.Add(new Obstacle(highObstacleTex, new Vector2(lastPosition + 1000, -50)));
 
                 //Increment the spawn location
                 lastPosition += 1000;
@@ -286,16 +312,40 @@ namespace Burrito
 
 
         //Loads a given number of Power Ups
-        protected void LoadPowerups(int numPowerUps, int lastPosition)
+        protected void LoadEncounteredObjects(int numEncounteredObjects, int lastPosition)
         {
             Random generator = new Random();
-            for (int i = 0; i < numPowerUps; i++)
+            for (int i = 0; i < numEncounteredObjects; i++)
             {
-                int rand = generator.Next(0, 60);
-                if (rand < 20)
+                int rand = generator.Next(0, 100);
+
+                if (rand < 25)
                 {
-                    powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                       new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                    if (rand < 5)
+                    {
+                        powerUps.Add(new ExtraLifePowerUp(extraLifePUpTex,
+                                                          new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                    }
+                    else if (rand < 15)
+                    {
+                        powerUps.Add(new SpeedPowerUp(speedPUpTex,
+                                           new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                    }
+
+                    else if (rand < 25)
+                    {
+                        powerUps.Add(new JumpPowerUp(jumpPUpTex,
+                                           new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                    }
+
+                }
+                else
+                {
+                    rand = generator.Next(0, 2);
+
+                    collectibles.Add(new Collectible(collectibleTextures[rand],
+                                     new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30)), 20));
+                    
                 }
                 //else if (rand < 40)
                 //{                
@@ -308,10 +358,12 @@ namespace Burrito
                 //        //TODO Textures for new powerups
                 //        powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
                 //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
- 	                }
-
-                lastPosition += 2000;
             }
-       }
+
+            lastPosition += 2000;
+        }
+
     }
+
+}
 
