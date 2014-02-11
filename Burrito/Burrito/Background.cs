@@ -37,8 +37,8 @@ namespace Burrito
         // Background.Update
         public void Update(float deltaX)
         {
-            screenpos.X -= deltaX;
-            screenpos.X = screenpos.X % mytexture.Width;
+            screenpos.X -= (int)deltaX;
+            screenpos.X = (int)screenpos.X % mytexture.Width;
         }
 
         // Background.Draw

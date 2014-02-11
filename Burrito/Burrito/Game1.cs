@@ -20,18 +20,23 @@ namespace Burrito
         SpriteBatch spriteBatch;
         //BACKGROUND
         Background myBackground;
+        int currSpeed = 300;    //The current speed of the game
+        int speedIncrease = 2;  //How fast the game speeds up
         //PLAYER
         Player player;
         //TEXTURES
         Texture2D obstacleTex;
         Texture2D speedPUpTex;
-
-        
-
-        int iPlayerScore = 0;
-        //Array of Obstacles (Current size: 1)
+        //TIMER
+        int defaultTime = 400;  //Increase speed every 400ms
+        int timer = 400;        //Starting timer
+        //OBSTACLES
         List<Obstacle> obstacles = new List<Obstacle>();
+        //POWER-UPS
         List<PowerUp> powerUps = new List<PowerUp>();
+        //SCORE
+        int iPlayerScore = 0;
+        
 
         public Game1()
         {
@@ -112,20 +117,25 @@ namespace Burrito
             // The time since Update was called last.
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            myBackground.Update(elapsed * 300); //Update the background based on time elapsed
-            
+            //Background Updating based on Time Elapsed (TO DO: Increase Speed over time)
+            updateGameSpeed(gameTime);
+
             //Obstacle Updating
             foreach (Obstacle x in obstacles)
             {
-                x.Update((float)8);
+                x.Update(elapsed * currSpeed);
             }
+
+            myBackground.Update(elapsed * currSpeed); //Update the background based on time elapsed
 
             //PowerUP updating
             foreach (PowerUp x in powerUps)
             {
-                x.Update((float)7);
+                x.Update(elapsed * currSpeed);
             }
-            player.Update(gameTime);            //Update player's sprite
+
+            //Update player's sprite
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -139,6 +149,7 @@ namespace Burrito
             spriteBatch.Begin();
             //Draw Stuff below this line
 
+            //BACKGROUND DRAWING LOGIC
             myBackground.Draw(spriteBatch);
 
             //ENCOUNTERED OBJECT DRAWING LOGIC
@@ -164,6 +175,7 @@ namespace Burrito
 
 
             //PLAYER DRAWING LOGIC
+            //PowerUp section
             foreach (PowerUp x in powerUps)
             {
                 if (x.BeenHit == false && x.WasHit((int)player.position.X, (int)player.position.Y, 200, 200))
@@ -171,6 +183,8 @@ namespace Burrito
                     x.BeenHit = true;
                 }
             }
+
+            //Obstacle Section
             foreach (Obstacle x in obstacles)
             {
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
@@ -194,6 +208,19 @@ namespace Burrito
             base.Draw(gameTime);
         }
 
+        //Makes the game move faster over time
+        protected void updateGameSpeed(GameTime gametime)
+        {
+            float elapsed = (float)gametime.ElapsedGameTime.TotalMilliseconds;
+            timer -= (int)elapsed;
+
+            if (timer <= 0)
+            {
+                timer = defaultTime;     //Every half second
+                currSpeed += speedIncrease;          //Increase currSpeed
+            }
+        }
+
         //Loads a given number of Obstacles
         protected void LoadObstacles(int numObstacles, int lastPosition)
         {
@@ -207,6 +234,7 @@ namespace Burrito
                 //Spawn in Air
                 else
                     obstacles.Add(new Obstacle(obstacleTex, new Vector2(lastPosition + 1300, 100)));
+
                 //Increment the spawn location
                 lastPosition += 1300;
             }

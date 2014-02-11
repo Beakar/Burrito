@@ -40,7 +40,7 @@ namespace Burrito
         //Moves the Object to the left a given (deltaX) length
         public void Update(float deltaX)
         {
-            position.X -= deltaX;
+            position.X -= (int)deltaX;
             hitbox.X -= (int)deltaX;
         }
 
