@@ -8,18 +8,14 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Burrito
 {
-    public class PowerUp
+    public class PowerUp : EncounteredObject
     {
         public static int POWER_UP_SIZE = 30;
-        protected Vector2 position;
-        protected Vector2 size = new Vector2(POWER_UP_SIZE, POWER_UP_SIZE);//powerup size
         protected Rectangle rectHitBox;
-        protected Texture2D texture;
 
-        public PowerUp(int x, int y, Texture2D texture)
+        public PowerUp(int x, int y, Texture2D texture) : base(texture, new Vector2((float)x, (float)y))
         {
-            this.texture = texture;
-            position = new Vector2(x, y);
+            size = new Vector2(POWER_UP_SIZE, POWER_UP_SIZE);
             rectHitBox = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
         }
 
