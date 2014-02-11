@@ -14,6 +14,7 @@ namespace Burrito
     // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        AnimatedSprite Explosion;
         public static int DEFAULT_SPEED = 400;
         public static int SPEED_RESET = -5;
         public static int NO_PUP = -1;
@@ -24,11 +25,9 @@ namespace Burrito
         public bool hasSpeedBoost;
         int lives;
         HUD hud;
-
+        Explosion explosion;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        AnimatedSprite Explosion;
-        Explosion[] Explosions = new Explosion[MAX_LIVES];
         Random generator = new Random();
 
         //BACKGROUND
@@ -82,6 +81,8 @@ namespace Burrito
         protected override void LoadContent()
         {
 
+
+
             obstacleTex = Content.Load<Texture2D>(@"Textures\angry");
             speedPUpTex = Content.Load<Texture2D>(@"Textures\speedpup");
             jumpPUpTex = Content.Load<Texture2D>(@"Textures\jumppup");
@@ -89,6 +90,12 @@ namespace Burrito
             explosionTex = Content.Load<Texture2D>(@"Textures\explosions");
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Explosion = new AnimatedSprite(
+            Content.Load<Texture2D>(@"Textures\Explosions"),
+                 0, 0, 64, 64, 16);
+            Explosion.X = 0;
+            Explosion.Y = 0;
 
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
@@ -98,11 +105,10 @@ namespace Burrito
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
             hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
 
-            for (int i = 0; i < MAX_LIVES; i++)
-            {
-                Explosions[i] = new Explosion(explosionTex,
+                explosion = new Explosion(explosionTex,
                                 0, generator.Next(8) * 64, 64, 64, 16);
-            }
+            
+
             //Load the PowerUps
             LoadPowerups(8, 0);
 
@@ -131,6 +137,8 @@ namespace Burrito
         // Parameter<gameTime>: Provides a snapshot of timing values.
         protected override void Update(GameTime gameTime)
         {
+
+            Explosion.Update(gameTime);
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -240,23 +248,28 @@ namespace Burrito
                 }
             }
 
+            player.Draw(spriteBatch);
+
             //Obstacle Section
             foreach (Obstacle x in obstacles)
             {
+
                 //SLIDING
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
                 {
                     lives--;
-                    break;
+                    drawExplosion();
+                    
                 }
                 //NOT SLIDING
                 else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
                     lives--;
-                    break;
+                    drawExplosion();
+                    
                 }
-                else
-                    player.Draw(spriteBatch);
+                
+      
 
             }
             if (obstacles.Count == 0)
@@ -329,6 +342,22 @@ namespace Burrito
                 lastPosition += 2000;
             }
         }
+           
+        public void drawExplosion()
+            {   
+            int k = -10;
+                for (int i = -10; i <= 140; i += 20)
+                {
+                        Explosion.Draw(spriteBatch, (int)player.position.X + k + 75, (int)player.position.Y + i, false);
+                    if(k == -10)
+                        k = 20;
+                    else
+                        k=-10;
+                    }
+                }
+    
+
+        
     }
 }
 
