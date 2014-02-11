@@ -13,16 +13,17 @@ namespace Burrito
 {
     class Player
     {
-        private static int NO_PUP = -1;
-        private static int SPEED_PUP = 0;
-        private static int JUMP_PUP = 1;
-        private static int X_LIFE_PUP = 2;
+        private static readonly int NO_PUP = -1;
+        private static readonly int SPEED_PUP = 0;
+        private static readonly int JUMP_PUP = 1;
+        private static readonly int X_LIFE_PUP = 2;
+        public static readonly int SPEED_RESET = -5;
+        public int startTime;
         bool hasSpeedBoost;
-        int speedBoostTimer;
         private Texture2D player;
         public Vector2 position;
         public Vector2 velocity;
-        public int hasPowerUp;
+        public int hasPowerUp = NO_PUP;
         //Have we already jumped
         private bool hasJumped;
 
@@ -32,7 +33,7 @@ namespace Burrito
         public int HasPowerUp
         {
             get { return hasPowerUp; }
-            set { hasPowerUp = HasPowerUp; }
+            set { hasPowerUp = value; }
         }
 
         public bool IsSliding
@@ -147,29 +148,40 @@ namespace Burrito
             if (hasJumped == false)
                 velocity.Y = 0f;
 
-            switch (hasPowerUp)
+            if (hasPowerUp > -1)
             {
-                case -1:
-                    break;
-                case 0:
-                    hasSpeedBoost = true;
-                    velocity.X += 10f; 
-                    speedBoostTimer = 100; //how long the speed boost lasts
-                    break;
-                case 1:
+                switch (hasPowerUp)
+                {
+                    case -1:
+                        break;
+                    case 0:
+                        if (startTime != 0)
+                        {
+                            startTime += 400;
+                            hasPowerUp = NO_PUP;
+                            break;
+                        }
+                        hasSpeedBoost = true;
+                        startTime = (int)gametime.TotalGameTime.TotalSeconds;
+                        break;
+                    case 1:
 
-                    break;
-                case 2:
-                    //TODO add extra life logic when lives exist
-                    break;
-                default:
-                    break;
+                        break;
+                    case 2:
+                        //TODO add extra life logic when lives exist
+                        break;
+                    default:
+                        break;
+                }
+                
             }
-            if (hasSpeedBoost && speedBoostTimer > 0)
+
+            if (hasSpeedBoost && (startTime + 4) < (int)gametime.TotalGameTime.TotalSeconds)
             {
-                velocity.X += 0.5f; 
+                hasSpeedBoost = false;
+                hasPowerUp = SPEED_RESET;
+                startTime = 0;
             }
-
 
         }
 

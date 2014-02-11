@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Background.cs" />
     <Compile Include="Collectable.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="EncounteredObject.cs" />
     <Compile Include="ExtraLifePowerUp.cs" />
     <Compile Include="JumpPowerUp.cs" />
