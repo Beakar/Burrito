@@ -19,8 +19,9 @@ namespace Burrito
 
         public int Lives { get; set; }
 
-        public HUD()
+        public HUD(int lives)
         {
+            Lives = lives;
         }
 
         public void Draw(SpriteBatch spriteBatch)

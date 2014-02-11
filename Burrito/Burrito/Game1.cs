@@ -121,7 +121,7 @@ namespace Burrito
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\bg1"); //Load Background
 
-            hud = new HUD();
+            hud = new HUD(lives);
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
             hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
 
