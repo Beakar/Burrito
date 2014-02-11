@@ -24,6 +24,10 @@ namespace Burrito
         int speedIncrease = 2;  //How fast the game speeds up
         //PLAYER
         Player player;
+
+        //HUD
+        Hud hud;
+
         //TEXTURES
         Texture2D obstacleTex;
         Texture2D speedPUpTex;
@@ -76,6 +80,12 @@ namespace Burrito
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
+
+            //initialize hud
+            hud = new Hud();
+            hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
+            hud.ScoreBack = Content.Load<Texture2D>(@"Textures\scoreback");
+
            //powerups
 
             powerUps.Add(new SpeedPowerUp(speedPUpTex,
@@ -151,6 +161,7 @@ namespace Burrito
 
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
+            hud.Draw(spriteBatch);
 
             //ENCOUNTERED OBJECT LOGIC//
             foreach (Obstacle x in obstacles)
