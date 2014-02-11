@@ -22,7 +22,9 @@ namespace Burrito
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
         public bool hasSpeedBoost;
-        public Explosion explosion;
+
+        HUD hud;
+
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -35,7 +37,6 @@ namespace Burrito
         //TEXTURES
         Texture2D obstacleTex;
         Texture2D speedPUpTex;
-        Texture2D explosionTex;
         //TIMER
         int defaultTime = 400;  //Increase speed every 400ms
         int timer = 400;        //Starting timer
@@ -76,13 +77,17 @@ namespace Burrito
 
             obstacleTex = Content.Load<Texture2D>(@"Textures\angry");
             speedPUpTex = Content.Load<Texture2D>(@"Textures\jalapeno");
-            explosionTex = Content.Load<Texture2D>(@"Textures\explosions");
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
+
+            hud = new HUD();
+            hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
+            hud.Back = Content.Load <Texture2D>(@"Textures\scoreback");
 
             //Load the PowerUps
             LoadPowerups(5, 0);
@@ -168,6 +173,8 @@ namespace Burrito
             spriteBatch.Begin();
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
+
+            hud.Draw(spriteBatch);
 
             //ENCOUNTERED OBJECT LOGIC//
             //Remove obstacles that are offscreen
