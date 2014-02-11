@@ -111,6 +111,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="EncounteredObject.cs" />
     <Compile Include="ExtraLifePowerUp.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="JumpPowerUp.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
