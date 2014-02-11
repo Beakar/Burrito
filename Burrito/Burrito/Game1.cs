@@ -14,13 +14,18 @@ namespace Burrito
     // This is the main type for your game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        public static int DEFAULT_SPEED = 300;
+        public static int SPEED_RESET = -5;
+        public static int NO_PUP = -1;
         public static int SPEED_PUP = 0;
-
+        public static int JUMP_PUP = 1;
+        public static int EXTRA_LIFE_PUP = 2;
+        public bool hasSpeedBoost;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         //BACKGROUND
         Background myBackground;
-        int currSpeed = 300;    //The current speed of the game
+        int currSpeed = DEFAULT_SPEED;    //The current speed of the game
         int speedIncrease = 2;  //How fast the game speeds up
         //PLAYER
         Player player;
@@ -76,15 +81,8 @@ namespace Burrito
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
-           //powerups
-
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(2400, 250)));
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(3900, 250)));
-            powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                            new Vector2(5400, 250)));
-
+            //load powerups
+            LoadPowerups(8, 0);
             //Load the obstacles
             LoadObstacles(8, 0);
 
@@ -128,14 +126,29 @@ namespace Burrito
 
             myBackground.Update(elapsed * currSpeed); //Update the background based on time elapsed
 
+            //Update player's sprite
+            player.Update(gameTime);
+
             //PowerUP updating
             foreach (PowerUp x in powerUps)
             {
                 x.Update(elapsed * currSpeed);
             }
 
-            //Update player's sprite
-            player.Update(gameTime);
+
+            if(player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
+            {
+                currSpeed += 200;
+                hasSpeedBoost = true;
+                player.HasPowerUp = NO_PUP;
+            }
+            if (player.HasPowerUp == SPEED_RESET)
+            {
+                currSpeed -= 200;
+                hasSpeedBoost = false;
+                player.HasPowerUp = NO_PUP;
+            }
+            
 
             base.Update(gameTime);
         }
@@ -178,6 +191,12 @@ namespace Burrito
                 }
                 x.Draw(spriteBatch);
             }
+            if (powerUps.Count < 5)
+            {
+                LoadPowerups(6, (int)(powerUps[powerUps.Count - 1].position.X));
+            }
+
+
 
 
             //PLAYER DRAWING LOGIC//
@@ -255,26 +274,26 @@ namespace Burrito
             Random generator = new Random();
             for (int i = 0; i < numPowerUps; i++)
             {
-                int rand = generator.Next(0, 60);
+                int rand = generator.Next(0, 19);//TODO fix for other powerups
                 if (rand < 20)
                 {
                     powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1500, 250)));
+                                 new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(5, 30))));
                 }
                 else if (rand < 40)
                 {
-                    //TODO Textures for new powerups
-                    powerUps.Add(new JumpPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1500, 250)));
+                //    //TODO Textures for new powerups
+                //    powerUps.Add(new JumpPowerUp(speedPUpTex,
+                    //                  new Vector2(lastPosition + (100*generator.Next(20, 45)), 10 * generator.Next(20, 60))));
+                //}
+                //else
+                //{
+                //    //TODO Textures for new powerups
+                //    powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
+                    //                  new Vector2(lastPosition + (100*generator.Next(20, 45)), 10 * generator.Next(20, 60))));
                 }
-                else
-                {
-                    //TODO Textures for new powerups
-                    powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 1500, 250)));
-                }
-                lastPosition += 1500;
+                lastPosition += 3000;
             }
-       }
+        }
     }
 }
