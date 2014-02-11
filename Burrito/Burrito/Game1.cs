@@ -86,7 +86,7 @@ namespace Burrito
                                             new Vector2(5400, 250)));
 
             //Load the obstacles
-            LoadObstacles(20, 0);
+            LoadObstacles(8, 0);
 
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
@@ -152,7 +152,7 @@ namespace Burrito
             //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
 
-            //ENCOUNTERED OBJECT DRAWING LOGIC//
+            //ENCOUNTERED OBJECT LOGIC//
             foreach (Obstacle x in obstacles)
             {
                 if (x.position.X + x.size.X < 0)
@@ -161,6 +161,11 @@ namespace Burrito
                     break;
                 }
                 x.Draw(spriteBatch);
+            }
+
+            if (obstacles.Count < 5)
+            {
+                LoadObstacles(6, (int)(obstacles[obstacles.Count-1].position.X));
             }
 
             //POWERUP DRAWING LOGIC//
