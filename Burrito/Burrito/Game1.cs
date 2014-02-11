@@ -20,13 +20,17 @@ namespace Burrito
         public static int SPEED_PUP = 0;
         public static int JUMP_PUP = 1;
         public static int EXTRA_LIFE_PUP = 2;
+        public static int MAX_LIVES = 3;
         public bool hasSpeedBoost;
-
+        int lives;
         HUD hud;
-
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        AnimatedSprite Explosion;
+        Explosion[] Explosions = new Explosion[MAX_LIVES];
+        Random generator = new Random();
+
         //BACKGROUND
         Background myBackground;
         int currSpeed = DEFAULT_SPEED;    //The current speed of the game
@@ -36,6 +40,9 @@ namespace Burrito
         //TEXTURES
         Texture2D obstacleTex;
         Texture2D speedPUpTex;
+        Texture2D jumpPUpTex;
+        Texture2D extraLifePUpTex;
+        Texture2D explosionTex;
         //TIMER
         int defaultTime = 400;  //Increase speed every 400ms
         int timer = 400;        //Starting timer
@@ -43,7 +50,8 @@ namespace Burrito
         List<Obstacle> obstacles = new List<Obstacle>();
         //POWER-UPS
         List<PowerUp> powerUps = new List<PowerUp>();
-        
+      
+
 
         public Game1()
         {
@@ -75,8 +83,10 @@ namespace Burrito
         {
 
             obstacleTex = Content.Load<Texture2D>(@"Textures\angry");
-            speedPUpTex = Content.Load<Texture2D>(@"Textures\jalapeno");
-
+            speedPUpTex = Content.Load<Texture2D>(@"Textures\speedpup");
+            jumpPUpTex = Content.Load<Texture2D>(@"Textures\jumppup");
+            extraLifePUpTex = Content.Load<Texture2D>(@"Textures\1uppup");
+            explosionTex = Content.Load<Texture2D>(@"Textures\explosions");
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -86,8 +96,13 @@ namespace Burrito
 
             hud = new HUD();
             hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
-            hud.Back = Content.Load <Texture2D>(@"Textures\scoreback");
+            hud.Back = Content.Load<Texture2D>(@"Textures\scoreback");
 
+            for (int i = 0; i < MAX_LIVES; i++)
+            {
+                Explosions[i] = new Explosion(explosionTex,
+                                0, generator.Next(8) * 64, 64, 64, 16);
+            }
             //Load the PowerUps
             LoadPowerups(8, 0);
 
@@ -109,7 +124,7 @@ namespace Burrito
         // UnloadContent will be called once per game and is the place to unload
         // all content.
         protected override void UnloadContent()
-        {}
+        { }
 
         // Allows the game to run logic such as updating the world,
         // checking for collisions, gathering input, and playing audio.
@@ -141,7 +156,7 @@ namespace Burrito
 
             }
 
-             if(player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
+            if (player.HasPowerUp == SPEED_PUP && !hasSpeedBoost)
             {
                 currSpeed += 200;
                 hasSpeedBoost = true;
@@ -192,7 +207,7 @@ namespace Burrito
             //Load (6) more obstacles if the amount is running low
             if (obstacles.Count < 5)
             {
-                LoadObstacles(6, (int)(obstacles[obstacles.Count-1].position.X));
+                LoadObstacles(6, (int)(obstacles[obstacles.Count - 1].position.X));
             }
 
             //POWERUP DRAWING LOGIC//
@@ -231,16 +246,18 @@ namespace Burrito
                 //SLIDING
                 if (player.IsSliding && x.WasHit((int)player.position.X + 20, (int)player.position.Y + 100, 160, 80))
                 {
+                    lives--;
                     break;
                 }
                 //NOT SLIDING
                 else if (!player.IsSliding && x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
+                    lives--;
                     break;
                 }
                 else
                     player.Draw(spriteBatch);
-                    
+
             }
             if (obstacles.Count == 0)
             {
@@ -267,7 +284,7 @@ namespace Burrito
         //Loads a given number of Obstacles
         protected void LoadObstacles(int numObstacles, int lastPosition)
         {
-            Random generator = new Random();
+
             for (int i = 0; i < numObstacles; ++i)
             {
                 int rand = generator.Next(0, 50);
@@ -287,30 +304,31 @@ namespace Burrito
         //Loads a given number of Power Ups
         protected void LoadPowerups(int numPowerUps, int lastPosition)
         {
-            Random generator = new Random();
+
             for (int i = 0; i < numPowerUps; ++i)
             {
                 int rand = generator.Next(0, 60);
                 if (rand < 20)
                 {
                     powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                       new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                                       new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
                 }
-                //else if (rand < 40)
-                //{                
-                //    //TODO Textures for new powerups
-                //        powerUps.Add(new JumpPowerUp(speedPUpTex,
-                //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
-                //    }
-                //    else
-                //    {
-                //        //TODO Textures for new powerups
-                //        powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
-                //                         new Vector2(lastPosition + (100*generator.Next(20, 30)), 10 * generator.Next(7, 30))));
- 	                }
+                else if (rand < 40)
+                {
+                    //TODO Textures for new powerups
+                    powerUps.Add(new JumpPowerUp(jumpPUpTex,
+                                     new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                }
+                else
+                {
+                    //TODO Textures for new powerups
+                    powerUps.Add(new ExtraLifePowerUp(extraLifePUpTex,
+                                     new Vector2(lastPosition + (100 * generator.Next(20, 30)), 10 * generator.Next(7, 30))));
+                }
 
                 lastPosition += 2000;
             }
-       }
+        }
     }
+}
 

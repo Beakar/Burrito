@@ -13,11 +13,11 @@ namespace Burrito
 {
     class Player
     {
-        private static readonly int NO_PUP = -1;
-        private static readonly int SPEED_PUP = 0;
-        private static readonly int JUMP_PUP = 1;
-        private static readonly int X_LIFE_PUP = 2;
-        public static readonly int SPEED_RESET = -5;
+        private const int NO_PUP = -1;
+        private const int SPEED_PUP = 0;
+        private const int JUMP_PUP = 1;
+        private const int X_LIFE_PUP = 2;
+        public const int SPEED_RESET = -5;
         public int startTime;
         bool hasSpeedBoost;
         private Texture2D player;
@@ -26,7 +26,7 @@ namespace Burrito
         public int hasPowerUp = NO_PUP;
         //Have we already jumped
         private bool hasJumped;
-
+        public bool hasJumpPUP;
 
         private bool _isSliding;
 
@@ -128,12 +128,14 @@ namespace Burrito
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 currentFrame.X = sheetSize.X - 2;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) && !hasJumped)
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) &&(hasJumpPUP || !hasJumped))
             {
                 position.Y -= 20f;  //Initial Jump Speed (Curr: 20f / only change this value)
                 velocity.Y = -15f;  //Initial Jump velocity (Curr: -15f / Value must be <0f)
                 sound[0].Play();    //Jump Sound Effect
                 hasJumped = true;
+                if (hasJumpPUP)
+                    hasJumpPUP = false;
             }
 
             if (hasJumped == true)
@@ -152,9 +154,9 @@ namespace Burrito
             {
                 switch (hasPowerUp)
                 {
-                    case -1:
+                    case NO_PUP:
                         break;
-                    case 0:
+                    case SPEED_PUP:
                         if (startTime != 0)
                         {
                             startTime += 4;
@@ -164,10 +166,11 @@ namespace Burrito
                         hasSpeedBoost = true;
                         startTime = (int)gametime.TotalGameTime.TotalSeconds;
                         break;
-                    case 1:
-
+                    case JUMP_PUP:
+                        hasJumpPUP = true;
+                        hasPowerUp = NO_PUP;
                         break;
-                    case 2:
+                    case X_LIFE_PUP:
                         //TODO add extra life logic when lives exist
                         break;
                     default:
