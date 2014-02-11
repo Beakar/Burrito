@@ -54,11 +54,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\KingBurrito.png">
-      <Name>KingBurrito</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sound\cartoon008.wav">
@@ -89,15 +84,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\burritofix.png">
-      <Name>burritofix</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\KingBurrito2.png">
-      <Name>KingBurrito2</Name>
+    <Compile Include="Textures\KingBurrito.png">
+      <Name>KingBurrito</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

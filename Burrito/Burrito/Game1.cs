@@ -91,7 +91,7 @@ namespace Burrito
             SoundEffect[] sound = new SoundEffect[2];
             sound[0] = Content.Load<SoundEffect>(@"Sound\cartoon008");  //Load Jump SoundEffect
             sound[1] = Content.Load<SoundEffect>(@"Sound\cartoon_skid");  //Load slide SoundEffect
-            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito2"), new Vector2(100, 275), sound);  //Load Player
+            player = new Player(Content.Load<Texture2D>(@"Textures\KingBurrito"), new Vector2(100, 275), sound);  //Load Player
             player.soundtrack = Content.Load<Song>(@"Sound\soundtrack");  //Load Game Soundtrack
             MediaPlayer.Play(player.soundtrack);  //Play Soundtrack...
             MediaPlayer.IsRepeating = true;       //On Repeat
@@ -149,10 +149,10 @@ namespace Burrito
             spriteBatch.Begin();
             //Draw Stuff below this line
 
-            //BACKGROUND DRAWING LOGIC
+            //BACKGROUND DRAWING LOGIC//
             myBackground.Draw(spriteBatch);
 
-            //ENCOUNTERED OBJECT DRAWING LOGIC
+            //ENCOUNTERED OBJECT DRAWING LOGIC//
             foreach (Obstacle x in obstacles)
             {
                 if (x.position.X + x.size.X < 0)
@@ -163,6 +163,7 @@ namespace Burrito
                 x.Draw(spriteBatch);
             }
 
+            //POWERUP DRAWING LOGIC//
             foreach (PowerUp x in powerUps)
             {
                 if (x.position.X + x.size.X < 0)
@@ -174,7 +175,7 @@ namespace Burrito
             }
 
 
-            //PLAYER DRAWING LOGIC
+            //PLAYER DRAWING LOGIC//
             //PowerUp section
             foreach (PowerUp x in powerUps)
             {
@@ -218,8 +219,8 @@ namespace Burrito
 
             if (timer <= 0)
             {
-                timer = defaultTime;     //Every half second
-                currSpeed += speedIncrease;          //Increase currSpeed
+                timer = defaultTime;         //Every half second
+                currSpeed += speedIncrease;  //Increase currSpeed
             }
         }
 
