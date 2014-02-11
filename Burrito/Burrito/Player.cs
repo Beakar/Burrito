@@ -117,7 +117,7 @@ namespace Burrito
                 sound[1].Play();
 
             //The player will slide when he presses Keys.Down
-            if (Keyboard.GetState().IsKeyDown(Keys.Down) && !hasJumped)
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 IsSliding = true;
 
             //Sliding will end when player lets go of Keys.Down

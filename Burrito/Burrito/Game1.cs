@@ -319,6 +319,7 @@ namespace Burrito
             timer -= (int)elapsed;
             if (timer <= 0)
             {
+                hud.Score += 2;
                 timer = defaultTime;         //Every defaultTime
                 currSpeed += speedIncrease;  //Increase currSpeed
             }
