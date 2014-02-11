@@ -34,8 +34,6 @@ namespace Burrito
         List<Obstacle> obstacles = new List<Obstacle>();
         //POWER-UPS
         List<PowerUp> powerUps = new List<PowerUp>();
-        //SCORE
-        HUD hud;
         
 
         public Game1()
@@ -75,8 +73,6 @@ namespace Burrito
 
             // TODO: use this.Content to load your game content here
             myBackground = new Background();
-            hud = new HUD();
-            hud.Font = Content.Load<SpriteFont>(@"Fonts\Pericles");
             Texture2D background = Content.Load<Texture2D>(@"Textures\Background"); //Load Background
 
             //Load the PowerUps
@@ -192,7 +188,6 @@ namespace Burrito
                 if (x.WasHit((int)player.position.X + 80, (int)player.position.Y + 20, 100, 160))
                 {
                     player.HasPowerUp = x.getPowerUp();
-                    hud.Score += 50;
                     powerUps.Remove(x);
                     break;
                 }
@@ -219,8 +214,6 @@ namespace Burrito
             {
                 player.Draw(spriteBatch);
             }
-            //Update HUD
-            hud.Draw(spriteBatch);
 
             //Don't call anything after this line
             spriteBatch.End();
@@ -234,7 +227,6 @@ namespace Burrito
             timer -= (int)elapsed;
             if (timer <= 0)
             {
-                hud.Score += 5;
                 timer = defaultTime;         //Every defaultTime
                 currSpeed += speedIncrease;  //Increase currSpeed
             }
@@ -270,21 +262,21 @@ namespace Burrito
                 if (rand < 70)
                 {
                     powerUps.Add(new SpeedPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 500, 300)));
+                                 new Vector2(lastPosition + 1700, 300)));
                 }
                 else if (rand < 40)
                 {
                     //TODO Textures for new powerups
                     powerUps.Add(new JumpPowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 500, 300)));
+                                 new Vector2(lastPosition + 1700, 300)));
                 }
                 else
                 {
                     //TODO Textures for new powerups
                     powerUps.Add(new ExtraLifePowerUp(speedPUpTex,
-                                 new Vector2(lastPosition + 500, 300)));
+                                 new Vector2(lastPosition + 1700, 300)));
                 }
-                lastPosition += 500;
+                lastPosition += 1700;
             }
        }
     }
