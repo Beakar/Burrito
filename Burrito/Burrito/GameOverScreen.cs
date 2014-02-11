@@ -21,7 +21,7 @@ namespace Burrito
         public GameOverScreen(Game1 game)
         {
             this.game = game;
-            texture = game.Content.Load<Texture2D>(@"Textures\bg3");  //Placeholder Image
+            texture = game.Content.Load<Texture2D>(@"Textures\gameend");  //Placeholder Image
             lastState = Keyboard.GetState();
         }
 
